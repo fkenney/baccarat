@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+java{
+    toolchain{
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+group 'com.tlglearning'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    def junitVersion = '5.8.2'
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+}
+
+test {
+    useJUnitPlatform()
+}
