@@ -21,7 +21,7 @@ public class Hand {
       int points = 0;
       for(Card card: cards){
          // TODO : Assign a point value to each card?
-         // points += card.Rank.Value;
+        points += card.getRank().getPoint();
       }
       return points;
    }
