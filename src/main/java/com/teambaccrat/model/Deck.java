@@ -21,6 +21,13 @@ public class Deck implements Iterable<Card> {
       for (Rank rank :ranks) {
         Card card = new Card(rank, suit);
         cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
       }
     }
   }
