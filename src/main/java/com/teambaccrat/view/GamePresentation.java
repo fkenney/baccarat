@@ -1,5 +1,5 @@
 package com.teambaccrat.view;
 
-public interface GamePresentation {
+public interface GamePresentation<T> {
 
 }

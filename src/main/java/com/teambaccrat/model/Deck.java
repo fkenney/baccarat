@@ -16,18 +16,10 @@ public class Deck implements Iterable<Card> {
   public Deck() {
     Suit[] suits = Suit.values();
     Rank[] ranks = Rank.values();
-    cards = new ArrayList<>(suits.length * ranks.length * 8);
+    cards = new ArrayList<>(suits.length * ranks.length);
     for (Suit suit : suits) {
       for (Rank rank :ranks) {
         Card card = new Card(rank, suit);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
-        cards.add(card);
       }
     }
   }
