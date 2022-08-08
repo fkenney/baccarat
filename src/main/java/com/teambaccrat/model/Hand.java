@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Hand {
 
-   private List<Card> cards;
+   private final List<Card> cards;
 
 
    public Hand(){
@@ -26,7 +26,12 @@ public class Hand {
       return points;
    }
 
-   public String showHand(){
+   @Override
+   public String toString() {
       return cards.toString();
+   }
+
+   public void add (Card card){
+      cards.add(card);
    }
 }
