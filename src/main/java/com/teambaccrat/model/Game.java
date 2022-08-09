@@ -2,36 +2,48 @@ package com.teambaccrat.model;
 
 import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
-import java.lang.invoke.SwitchPoint;
 import java.security.SecureRandom;
-import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Game {
 
-  //Initialize in constructor
-  // Player Hand
-  // Banker Hand
-  // Parameters
-  // Shoe (parameter for Game)
-  // Bet (parameter for game -- amount, who it's on)
+  private static final double MARKER_MIN = 0.6667;
+  private static final double MARKER_MAX = 0.8;
   private final Hand player;
   private final Hand banker;
+  private final Shoe shoe;
+  private Bet bet;
+  private int amount;
 
-  private Shoe shoe;
-  private final Bet bet;
-  private State state;
+  private String initialHands;
+  private String finalResult;
 
 
-  public Game(Shoe shoe, Bet bet) {
-    this.shoe = shoe;
-    this.bet = bet;
-    player = new Hand();
-    banker = new Hand();
+  public Game(int amount, String userBet) {
+      player = new Hand();
+      banker = new Hand();
+      setBet(userBet);
+      this.amount = amount;
+      Random rnd = new SecureRandom();
+      int numDecks = 8;
+      double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
+      shoe = new Shoe(numDecks, rnd, markerPoint);
+
   }
 
-  public State getState() {
-    return state;
+  private void setBet(String userBet) {
+    if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
+      throw new IllegalBetException(
+          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
+    } else {
+      // Sets bet value to matching Enum Value
+      for (Bet b : Bet.values()) {
+        if (Objects.equals(b.getSymbol(), userBet)) {
+          this.bet = b;
+        }
+      }
+    }
   }
 
   public boolean playerGetsThirdCard(Hand player) {
@@ -72,68 +84,64 @@ public class Game {
     return getThirdCard;
   }
 
-  public State whoWon(Hand player, Hand banker) {
+  public Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
-    State winState = null;
+    Result winResult = null;
     if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
-      winState = State.PLAYER_WIN;
+      winResult = Result.PLAYER_WIN;
     } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
-      winState = State.BANKER_WIN;
+      winResult = Result.BANKER_WIN;
     } else if (playerPoints == bankerPoints) {
-      winState = State.TIE;
+      winResult = Result.TIE;
     } else if (bankerPoints > playerPoints) {
-      winState = State.BANKER_WIN;
+      winResult = Result.BANKER_WIN;
     } else {
-      winState = State.PLAYER_WIN;
+      winResult = Result.PLAYER_WIN;
     }
-    return winState;
+    return winResult;
   }
 
 
-  public enum State {
-    START {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    INITIAL_CARDS_DEALT {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    PLAYER_ADDITIONAL_CARD {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    BANKER_ADDITIONAL_CARD {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    PLAYER_WIN,
-    BANKER_WIN,
-    TIE;
-
-    public boolean isTerminal() {
-      return true;
+  public void start() {
+    // TODO refactor strings better.
+    shoe.startGame();
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    initialHands = String.format("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+    System.out.println(initialHands);
+    if (playerGetsThirdCard(player)) {
+      System.out.println("Player gets a card");
+      player.add(shoe.draw());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
-
-
-    public State play(Bet bet, Shoe shoe) throws GameFinishedException {
-      // Create logic for each State
-      State nextState = null;
-
-      return nextState;
+    if (bankerGetsThirdCard(player, banker)) {
+      System.out.println("Banker gets a card...");
+      banker.add(shoe.draw());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
-
-
+    // TODO determine if won.
+    finalResult = String.format("%n%s - You won $$%d", whoWon(player, banker).getValue(), amount);
+    System.out.println(finalResult);
   }
 
+
+  public enum Result {
+    PLAYER_WIN("Player Wins!"),
+    BANKER_WIN("Banker Wins!"),
+    TIE("Tie!");
+
+    private final String value;
+
+    Result(String value) {
+      this.value = value;
+    }
+
+    public String getValue() {
+      return value;
+    }
+  }
 
 }
