@@ -3,7 +3,10 @@ package com.teambaccrat.model;
 import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
 import java.security.SecureRandom;
+import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class Game {
@@ -13,7 +16,7 @@ public class Game {
   private final Hand player;
   private final Hand banker;
   private final Shoe shoe;
-  private final Bet bet;
+  private Bet bet;
   private int amount;
 
   private String initialHands;
@@ -21,19 +24,28 @@ public class Game {
 
 
   public Game(int amount, String userBet) {
-    userBet = userBet.trim();
-    if (!userBet.equals("1") || !userBet.equals("2") || !userBet.equals("3")) {
-      throw new IllegalBetException(
-          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
-    } else {
       player = new Hand();
       banker = new Hand();
-      this.bet = Bet.valueOf(userBet);
+      setBet(userBet);
       this.amount = amount;
       Random rnd = new SecureRandom();
       int numDecks = 8;
       double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
       shoe = new Shoe(numDecks, rnd, markerPoint);
+
+  }
+
+  private void setBet(String userBet) {
+    if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
+      throw new IllegalBetException(
+          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
+    } else {
+      // Sets bet value to matching Enum Value
+      for (Bet b : Bet.values()) {
+        if (Objects.equals(b.getSymbol(), userBet)) {
+          this.bet = b;
+        }
+      }
     }
   }
 
@@ -100,16 +112,20 @@ public class Game {
     banker.add(shoe.draw());
     player.add(shoe.draw());
     banker.add(shoe.draw());
-    initialHands = String.format("Player has cards %s | Banker has cards %s", player.toString(),
-        banker.toString());
+    initialHands = String.format("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+    System.out.println(initialHands);
     if (playerGetsThirdCard(player)) {
+      System.out.println("Player gets a card");
       player.add(shoe.draw());
+      System.out.printf("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
     if (bankerGetsThirdCard(player, banker)) {
+      System.out.println("Banker gets a card");
       banker.add(shoe.draw());
+      System.out.printf("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
     finalResult = String.format("%s - You won %d", whoWon(player, banker), amount);
-
+    System.out.println(finalResult);
   }
 
 

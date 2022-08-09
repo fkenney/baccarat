@@ -12,4 +12,8 @@ public enum Bet {
   Bet(String symbol) {
     this.symbol = symbol;
   }
+
+  public String getSymbol() {
+    return symbol;
+  }
 }

@@ -22,6 +22,9 @@ public class Hand {
       for(Card card: cards){
         points += card.getRank().getPoint();
       }
+      if(points > 10){
+         points = points -10;
+      }
       return points;
    }
 
