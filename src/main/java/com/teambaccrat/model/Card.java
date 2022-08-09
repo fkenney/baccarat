@@ -40,7 +40,7 @@ public class Card implements Comparable<Card> {
     boolean result;
     if (this == obj) {
       result = true;
-    } else if (obj instanceof Card){
+    } else if (obj instanceof Card) {
       Card other = (Card) obj;
       result = (rank == other.rank && suit == other.suit);
     } else {
