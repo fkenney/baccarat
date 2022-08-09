@@ -1,18 +1,19 @@
 package com.teambaccrat.model;
 
+import java.lang.invoke.SwitchPoint;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 public class Game {
-
-  // Player Hand -initialize in constructor
-  // Banker Hand
-  // Shoe (parameter for Game)
-  // Bet (parameter for game -- amount, who it's on)
+  //Initialize in constructor
+    // Player Hand
+    // Banker Hand
+  // Parameters
+    // Shoe (parameter for Game)
+    // Bet (parameter for game -- amount, who it's on)
   private final Shoe shoe;
   private final Bet bet;
-  private int currentPoints;
   private State state;
 
 
@@ -27,6 +28,8 @@ public class Game {
     return state;
   }
 
+
+
   public State play (Hand playerHand, Hand bankerHand){
     // Create logic for each State
 
@@ -34,12 +37,13 @@ public class Game {
     // TODO, Determine if player gets 3rd Card
     //  If playerHand total is < 6, Player gets 3rd Card
 
+
     // PLAYER_WIN or TIE
     // TODO, PLAYER_WINS / TIE
     //  If playerHand is 8 or 9 PLAYER_WINS OR TIE
 
     // BANKER_ADDITIONAL_CARD
-    // TODO, IF -----------player doesn't have 3 cards,
+    // TODO, IF player doesn't have 3 cards,
     //  If bankerHand total is < 6, Banker gets 3rd Card
 
     // BANKER_WINS or TIE
@@ -54,7 +58,6 @@ public class Game {
     //  If PLAYER_ADDITIONAL_CARD is 9, 10, J, Q, K, A, Banker Gets Card if CurrentTotal < 4. (stays at 4 - 7)
 
     // TODO WIN_STATE
-
     return State.PLAYER_WIN;
   }
 
@@ -63,7 +66,8 @@ public class Game {
     BANKER_ADDITIONAL_CARD,
     PLAYER_WIN,
     BANKER_WIN,
-    TIE,
+    TIE;
+
   }
 
 }
