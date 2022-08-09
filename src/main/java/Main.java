@@ -4,13 +4,16 @@ import java.io.InputStreamReader;
 
 public class Main {
 
+  String bet;
+  String amount;
+
 
   //getting bet input from the user. possibly move to Dealer class in controller
-  public String getBet (String[] args) throws IOException {
+  public String getBet () throws IOException {
     System.out.println(
         " Who do you want to put the bet on? 1. Banker 2. Player 3. Tie. Press the number, please");
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String bet = reader.readLine();
+    bet = reader.readLine();
 
     if (bet.equals("1")) {
       System.out.println("You made a bet on Banker");
@@ -25,6 +28,14 @@ public class Main {
     }
     return bet;
   }
+
+//  public String getAmount() throws IOException {
+//    System.out.println("How much do you want to bet on " + bet + "?");
+//    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//    amount = reader.readLine();
+//    int betAmount = Integer.getInteger(amount);
+//
+//  }
 
     // Welcome Baccarat
     // Please enter your name
