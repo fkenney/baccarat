@@ -20,7 +20,7 @@ public class Shoe {
   private int dealCount = Integer.MAX_VALUE;
   private boolean reshuffleNeeded = true;
 
-  public Shoe(int numDecks, Random random, double shufflePoint) {
+  public Shoe(int numDecks, Random random, double markerPoint) {
     this.cards = new ArrayList<>(Suit.values().length* Rank.values().length* numDecks);
     this.random = random;
 
@@ -33,7 +33,7 @@ public class Shoe {
       }
     }
 
-    reshuffleCount = (int) (cards.size() * shufflePoint);
+    reshuffleCount = (int) (cards.size() * markerPoint);
   }
 
   public void startGame(){

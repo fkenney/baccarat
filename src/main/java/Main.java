@@ -9,7 +9,7 @@ public class Main {
     // Please enter your name
 
     // Build Deck
-    // repeat the following as user continues to play
+    // Repeat the following as user continues to play
       // Shuffle Deck with Random
       // Create Player, Banker Hand
       // Get Bets, 1 Player, 2 Banker, 3 Tie
