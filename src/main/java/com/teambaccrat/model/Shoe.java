@@ -7,11 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Shoe {
-   //shuffle
-  // deal
-  //parameter for marker (2/3 to 4/5 from end of shoe)
-  // need # of decks to go in shoe
-
   private final List<Card> cards;
   private final Random random;
   private final int reshuffleCount;
