@@ -1,18 +1,24 @@
 package com.teambaccrat.model;
 
+import com.teambaccrat.model.exception.GameFinishedException;
+import com.teambaccrat.model.exception.IllegalBetException;
 import java.lang.invoke.SwitchPoint;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 public class Game {
+
   //Initialize in constructor
-    // Player Hand
-    // Banker Hand
+  // Player Hand
+  // Banker Hand
   // Parameters
-    // Shoe (parameter for Game)
-    // Bet (parameter for game -- amount, who it's on)
-  private final Shoe shoe;
+  // Shoe (parameter for Game)
+  // Bet (parameter for game -- amount, who it's on)
+  private final Hand player;
+  private final Hand banker;
+
+  private Shoe shoe;
   private final Bet bet;
   private State state;
 
@@ -20,54 +26,114 @@ public class Game {
   public Game(Shoe shoe, Bet bet) {
     this.shoe = shoe;
     this.bet = bet;
-    Hand playerHand = new Hand();
-    Hand bankerHand = new Hand();
+    player = new Hand();
+    banker = new Hand();
   }
 
   public State getState() {
     return state;
   }
 
-
-
-  public State play (Hand playerHand, Hand bankerHand){
-    // Create logic for each State
-
-    // PLAYER_ADDITIONAL_CARD
-    // TODO, Determine if player gets 3rd Card
-    //  If playerHand total is < 6, Player gets 3rd Card
-
-
-    // PLAYER_WIN or TIE
-    // TODO, PLAYER_WINS / TIE
-    //  If playerHand is 8 or 9 PLAYER_WINS OR TIE
-
-    // BANKER_ADDITIONAL_CARD
-    // TODO, IF player doesn't have 3 cards,
-    //  If bankerHand total is < 6, Banker gets 3rd Card
-
-    // BANKER_WINS or TIE
-    // TODO, PLAYER_WINS/TIE
-    //  If bankerHand is 8 or 9 BANKER_WINS OR TIE // TIE
-
-    // TODO, ELSE IF ---------Player has 3 cards
-    //  If PLAYER_ADDITIONAL_CARD is 2 or 3, BANKER Gets Card  if  CurrentTotal < 5 (stays at 5 -7)
-    //  If PLAYER_ADDITIONAL_CARD is 4 or 5, Banker Gets Card if CurrentTotal < 6. (stays at 6 - 7)
-    //  If PLAYER_ADDITIONAL_CARD is 6 or 7, Banker Gets Card if CurrentTotal < 7. (stays at 7)
-    //  If PLAYER_ADDITIONAL_CARD is 8, Banker Gets Card if CurrentTotal < 3. (stays at 3 - 7)
-    //  If PLAYER_ADDITIONAL_CARD is 9, 10, J, Q, K, A, Banker Gets Card if CurrentTotal < 4. (stays at 4 - 7)
-
-    // TODO WIN_STATE
-    return State.PLAYER_WIN;
+  public boolean playerGetsThirdCard(Hand player) {
+    return player.pointValue() < 6;
   }
 
+  public boolean bankerGetsThirdCard(Hand player, Hand banker) {
+    boolean getThirdCard = false;
+    int valueOfLastPlayerCard = player.getLastCard().getRank().getPoint();
+    int bankerPoints = banker.pointValue();
+
+    if (player.size() == 2 && bankerPoints < 6) {
+      getThirdCard = true;
+    } else if (player.size() == 3) {
+      // If player has 3 Cards the value of the 3rd Card determines whether Banker gets 3rd Card.
+      switch (valueOfLastPlayerCard) {
+        case 2:
+        case 3:
+          getThirdCard = bankerPoints < 5;
+          break;
+        case 4:
+        case 5:
+          getThirdCard = bankerPoints < 6;
+          break;
+        case 6:
+        case 7:
+          getThirdCard = bankerPoints < 7;
+          break;
+        case 8:
+          getThirdCard = bankerPoints < 3;
+          break;
+        case 0:
+        case 1:
+        case 9:
+          getThirdCard = bankerPoints < 4;
+      }
+    }
+    return getThirdCard;
+  }
+
+  public State whoWon(Hand player, Hand banker) {
+    int playerPoints = player.pointValue();
+    int bankerPoints = banker.pointValue();
+    State winState = null;
+    if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
+      winState = State.PLAYER_WIN;
+    } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
+      winState = State.BANKER_WIN;
+    } else if (playerPoints == bankerPoints) {
+      winState = State.TIE;
+    } else if (bankerPoints > playerPoints) {
+      winState = State.BANKER_WIN;
+    } else {
+      winState = State.PLAYER_WIN;
+    }
+    return winState;
+  }
+
+
   public enum State {
-    PLAYER_ADDITIONAL_CARD,
-    BANKER_ADDITIONAL_CARD,
+    START {
+      @Override
+      public boolean isTerminal() {
+        return false;
+      }
+    },
+    INITIAL_CARDS_DEALT {
+      @Override
+      public boolean isTerminal() {
+        return false;
+      }
+    },
+    PLAYER_ADDITIONAL_CARD {
+      @Override
+      public boolean isTerminal() {
+        return false;
+      }
+    },
+    BANKER_ADDITIONAL_CARD {
+      @Override
+      public boolean isTerminal() {
+        return false;
+      }
+    },
     PLAYER_WIN,
     BANKER_WIN,
     TIE;
 
+    public boolean isTerminal() {
+      return true;
+    }
+
+
+    public State play(Bet bet, Shoe shoe) throws GameFinishedException {
+      // Create logic for each State
+      State nextState = null;
+
+      return nextState;
+    }
+
+
   }
+
 
 }
