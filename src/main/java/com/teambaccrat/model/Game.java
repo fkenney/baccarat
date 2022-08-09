@@ -8,34 +8,34 @@ import java.util.Random;
 
 public class Game {
 
-  //Initialize in constructor
-  // Player Hand
-  // Banker Hand
-  // Parameters
-  // Shoe (parameter for Game)
-  // Bet (parameter for game -- amount, who it's on)
-  private final Hand player;
-  private final Hand banker;
-
-  private final Shoe shoe;
-  private final Bet bet;
-  private double amount;
-
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
+  private final Hand player;
+  private final Hand banker;
+  private final Shoe shoe;
+  private final Bet bet;
+  private int amount;
 
-  private Game(double amount, Bet bet) {
-    player = new Hand();
-    banker = new Hand();
-    this.bet = bet;
-    this.amount = amount;
+  private String initialHands;
+  private String finalResult;
 
-    Random rnd = new SecureRandom();
-    int numDecks = 8;
-    double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
-    shoe = new Shoe(numDecks, rnd, markerPoint);
+
+  public Game(int amount, String userBet) {
+    userBet = userBet.trim();
+    if (!userBet.equals("1") || !userBet.equals("2") || !userBet.equals("3")) {
+      throw new IllegalBetException(
+          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
+    } else {
+      player = new Hand();
+      banker = new Hand();
+      this.bet = Bet.valueOf(userBet);
+      this.amount = amount;
+      Random rnd = new SecureRandom();
+      int numDecks = 8;
+      double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
+      shoe = new Shoe(numDecks, rnd, markerPoint);
+    }
   }
-
 
   public boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
@@ -93,27 +93,36 @@ public class Game {
     return winResult;
   }
 
-  public Result start(double amount, Bet bet){
-      Game game = new Game(amount, bet);
-      shoe.startGame();
+
+  public void start() {
+    shoe.startGame();
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    initialHands = String.format("Player has cards %s | Banker has cards %s", player.toString(),
+        banker.toString());
+    if (playerGetsThirdCard(player)) {
       player.add(shoe.draw());
+    }
+    if (bankerGetsThirdCard(player, banker)) {
       banker.add(shoe.draw());
-      player.add(shoe.draw());
-      banker.add(shoe.draw());
-      // DISPLAY TWO CARDS TO USER HERE
-      if(playerGetsThirdCard(player)){
-        player.add(shoe.draw());
-      }
-      if(bankerGetsThirdCard(player,banker)) {
-        banker.add(shoe.draw());
-      }
-      // DISPLAY RESULT and WINNINGS
-      return whoWon(player, banker);
+    }
+    finalResult = String.format("%s - You won %d", whoWon(player, banker), amount);
+
   }
+
+
   public enum Result {
-    PLAYER_WIN,
-    BANKER_WIN,
-    TIE;
+    PLAYER_WIN("Player Wins!"),
+    BANKER_WIN("Banker Wins!"),
+    TIE("Tie!");
+
+    private final String value;
+
+    Result(String value) {
+      this.value = value;
+    }
   }
 
 }
