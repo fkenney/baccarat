@@ -2,36 +2,39 @@ package com.teambaccrat.model;
 
 import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
-import java.lang.invoke.SwitchPoint;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 
 public class Game {
 
-  //Initialize in constructor
-  // Player Hand
-  // Banker Hand
-  // Parameters
-  // Shoe (parameter for Game)
-  // Bet (parameter for game -- amount, who it's on)
+  private static final double MARKER_MIN = 0.6667;
+  private static final double MARKER_MAX = 0.8;
   private final Hand player;
   private final Hand banker;
-
-  private Shoe shoe;
+  private final Shoe shoe;
   private final Bet bet;
-  private State state;
+  private int amount;
+
+  private String initialHands;
+  private String finalResult;
 
 
-  public Game(Shoe shoe, Bet bet) {
-    this.shoe = shoe;
-    this.bet = bet;
-    player = new Hand();
-    banker = new Hand();
-  }
-
-  public State getState() {
-    return state;
+  public Game(int amount, String userBet) {
+    userBet = userBet.trim();
+    if (!userBet.equals("1") || !userBet.equals("2") || !userBet.equals("3")) {
+      throw new IllegalBetException(
+          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
+    } else {
+      player = new Hand();
+      banker = new Hand();
+      this.bet = Bet.valueOf(userBet);
+      this.amount = amount;
+      Random rnd = new SecureRandom();
+      int numDecks = 8;
+      double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
+      shoe = new Shoe(numDecks, rnd, markerPoint);
+    }
   }
 
   public boolean playerGetsThirdCard(Hand player) {
@@ -72,68 +75,54 @@ public class Game {
     return getThirdCard;
   }
 
-  public State whoWon(Hand player, Hand banker) {
+  public Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
-    State winState = null;
+    Result winResult = null;
     if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
-      winState = State.PLAYER_WIN;
+      winResult = Result.PLAYER_WIN;
     } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
-      winState = State.BANKER_WIN;
+      winResult = Result.BANKER_WIN;
     } else if (playerPoints == bankerPoints) {
-      winState = State.TIE;
+      winResult = Result.TIE;
     } else if (bankerPoints > playerPoints) {
-      winState = State.BANKER_WIN;
+      winResult = Result.BANKER_WIN;
     } else {
-      winState = State.PLAYER_WIN;
+      winResult = Result.PLAYER_WIN;
     }
-    return winState;
+    return winResult;
   }
 
 
-  public enum State {
-    START {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    INITIAL_CARDS_DEALT {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    PLAYER_ADDITIONAL_CARD {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    BANKER_ADDITIONAL_CARD {
-      @Override
-      public boolean isTerminal() {
-        return false;
-      }
-    },
-    PLAYER_WIN,
-    BANKER_WIN,
-    TIE;
-
-    public boolean isTerminal() {
-      return true;
+  public void start() {
+    shoe.startGame();
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    player.add(shoe.draw());
+    banker.add(shoe.draw());
+    initialHands = String.format("Player has cards %s | Banker has cards %s", player.toString(),
+        banker.toString());
+    if (playerGetsThirdCard(player)) {
+      player.add(shoe.draw());
     }
-
-
-    public State play(Bet bet, Shoe shoe) throws GameFinishedException {
-      // Create logic for each State
-      State nextState = null;
-
-      return nextState;
+    if (bankerGetsThirdCard(player, banker)) {
+      banker.add(shoe.draw());
     }
-
+    finalResult = String.format("%s - You won %d", whoWon(player, banker), amount);
 
   }
 
+
+  public enum Result {
+    PLAYER_WIN("Player Wins!"),
+    BANKER_WIN("Banker Wins!"),
+    TIE("Tie!");
+
+    private final String value;
+
+    Result(String value) {
+      this.value = value;
+    }
+  }
 
 }
