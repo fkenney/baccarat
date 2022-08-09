@@ -3,9 +3,6 @@ package com.teambaccrat.model;
 import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
 import java.security.SecureRandom;
-import java.sql.SQLOutput;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
@@ -107,24 +104,26 @@ public class Game {
 
 
   public void start() {
+    // TODO refactor strings better.
     shoe.startGame();
     player.add(shoe.draw());
     banker.add(shoe.draw());
     player.add(shoe.draw());
     banker.add(shoe.draw());
-    initialHands = String.format("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+    initialHands = String.format("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     System.out.println(initialHands);
     if (playerGetsThirdCard(player)) {
       System.out.println("Player gets a card");
       player.add(shoe.draw());
-      System.out.printf("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
     if (bankerGetsThirdCard(player, banker)) {
-      System.out.println("Banker gets a card");
+      System.out.println("Banker gets a card...");
       banker.add(shoe.draw());
-      System.out.printf("Player has cards %s = %d points %n %nBanker has cards %s = %d points", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
     }
-    finalResult = String.format("%s - You won %d", whoWon(player, banker), amount);
+    // TODO determine if won.
+    finalResult = String.format("%n%s - You won $$%d", whoWon(player, banker).getValue(), amount);
     System.out.println(finalResult);
   }
 
@@ -138,6 +137,10 @@ public class Game {
 
     Result(String value) {
       this.value = value;
+    }
+
+    public String getValue() {
+      return value;
     }
   }
 

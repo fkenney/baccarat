@@ -19,11 +19,12 @@ public class Hand {
 
    public int pointValue(){
       int points = 0;
+      int rem= 0;
       for(Card card: cards){
         points += card.getRank().getPoint();
       }
-      if(points > 10){
-         points = points -10;
+      if(points >= 10){
+         points = points%10;
       }
       return points;
    }
