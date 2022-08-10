@@ -39,9 +39,10 @@ public class Controller {
           "Please, place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie");
     }
     game.setBet(bet);
+    updateView();
   }
 
-  public void setAmount() throws IOException {
+  public void setAmount () throws IOException {
     Balance balance = new Balance(Balance.getBalance());
     System.out.println("How much do you want to bet?");
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -50,6 +51,7 @@ public class Controller {
     System.out.println("You put $" + userAmount);
     int amount = Integer.parseInt(userAmount);
     game.setAmount(amount);
+    updateView();
   }
 
   public void startGame() {
@@ -57,32 +59,21 @@ public class Controller {
   }
 
 
-  public String setResultOutput() {
-    return view.setResultOutput(String.format(game.getGameResult()));
-  }
 
-  public String setPlayerHandOutPut() {
-    return view.setHandOutPut(
-        String.format("The player has %s, %s ", game.getPlayerHand(), game.getPlayerPoints()));
-  }
+//
+//  public String setPlayerHandOutPut() {
+//    return view.setHandOutPut(
+//        String.format("The player has %s, %s ", game.getPlayerHand(), game.getPlayerPoints()));
+//  }
+//
+//  public String setBankerHandOutPut() {
+//    return view.setHandOutput(
+//        String.format("The player has %s, %s", game.getPlayerHand(), game.getBankerPoints()));
+//  }
 
-  public String setBankerHandOutPut() {
-    return view.setHandOutput(
-        String.format("The player has %s, %s", game.getPlayerHand(), game.getBankerPoints()));
-  }
 
-  public static boolean continueGame() throws IOException {
-    System.out.println("Do you want to play again? 1.Yes 2.No");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String userInput = reader.readLine();
-    boolean gameContinue;
-    if (userInput.equals("1")) {
-      gameContinue = true;
-    } else if (userInput.equals("2")) {
-      gameContinue = false;
-    } else {
-      throw new IllegalArgumentException("please, put the valid number. 1.Yes 2.No");
-    }
-    return gameContinue;
+
+  public static void updateView() {
+
   }
 }
