@@ -49,9 +49,13 @@ public class Game {
     }
   }
 
+  public Bet getBet(){
+    return bet;
+  }
+
   private void setAmount(int amount) {
         int currentBalance = Balance.getBalance();
-      if(amount < MIN_BET && amount > MAX_BET){
+      if(amount < MIN_BET || amount > MAX_BET){
           throw new IllegalWagerAmountException(String.format("Wage amount must be between Min bet -%d  and  Max bet - %d", MIN_BET, MAX_BET));
       }
       if(amount > currentBalance){
@@ -64,6 +68,15 @@ public class Game {
       this.amount = amount;
   }
 
+  public int getAmount(){
+    return amount;
+  }
+
+  private void updateBalance(Result result, Bet bet){
+     if (result.toString().equals(bet.toString())){
+       System.out.println("idk if this works lol");
+     }
+  }
   private boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
   }
@@ -107,15 +120,15 @@ public class Game {
     int bankerPoints = banker.pointValue();
     Result winResult = null;
     if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
-      winResult = Result.PLAYER_WIN;
+      winResult = Result.PLAYER;
     } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
-      winResult = Result.BANKER_WIN;
+      winResult = Result.BANKER;
     } else if (playerPoints == bankerPoints) {
       winResult = Result.TIE;
     } else if (bankerPoints > playerPoints) {
-      winResult = Result.BANKER_WIN;
+      winResult = Result.BANKER;
     } else {
-      winResult = Result.PLAYER_WIN;
+      winResult = Result.PLAYER;
     }
     return winResult;
   }
@@ -148,9 +161,9 @@ public class Game {
     System.out.println(finalResult);
   }
 
-  private enum Result {
-    PLAYER_WIN("Player Wins!"),
-    BANKER_WIN("Banker Wins!"),
+  public enum Result {
+    PLAYER("Player Wins!"),
+    BANKER("Banker Wins!"),
     TIE("Tie!");
 
     private final String value;
