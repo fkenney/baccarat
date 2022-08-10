@@ -9,12 +9,12 @@ public class Balance {
     Balance.balance = balance;
   }
 
-  public void add(int bet) {
-    balance = getBalance() + bet;
+  public void add(int wager) {
+    balance = getBalance() + wager;
   }
 
-  public void subtract(int bet) {
-    balance = getBalance() - bet;
+  public void subtract(int wager) {
+    balance = getBalance() - wager;
   }
   public static int getBalance() {
     return balance;
