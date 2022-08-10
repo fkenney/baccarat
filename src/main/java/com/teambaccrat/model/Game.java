@@ -9,6 +9,8 @@ public class Game {
 
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
+  private static final int MAX_BET = 100;
+  private static final int MIN_BET = 20;
   private final Hand player;
   private final Hand banker;
   private final Shoe shoe;
@@ -20,14 +22,14 @@ public class Game {
 
 
   public Game(int amount, String userBet) {
-      player = new Hand();
-      banker = new Hand();
-      setBet(userBet);
-      this.amount = amount;
-      Random rnd = new SecureRandom();
-      int numDecks = 8;
-      double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
-      shoe = new Shoe(numDecks, rnd, markerPoint);
+    player = new Hand();
+    banker = new Hand();
+    setBet(userBet);
+    this.amount = amount;
+    Random rnd = new SecureRandom();
+    int numDecks = 8;
+    double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
+    shoe = new Shoe(numDecks, rnd, markerPoint);
 
   }
 
@@ -43,6 +45,12 @@ public class Game {
         }
       }
     }
+  }
+
+  private void setAmount(int amount) {
+      if(amount < MIN_BET && amount > MAX_BET){
+
+      }
   }
 
   public boolean playerGetsThirdCard(Hand player) {
@@ -108,17 +116,21 @@ public class Game {
     banker.add(shoe.draw());
     player.add(shoe.draw());
     banker.add(shoe.draw());
-    initialHands = String.format("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+    initialHands = String.format(
+        "%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),
+        player.pointValue(), banker.toString(), banker.pointValue());
     System.out.println(initialHands);
     if (playerGetsThirdCard(player)) {
       System.out.println("Player gets a card");
       player.add(shoe.draw());
-      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n",
+          player.toString(), player.pointValue(), banker.toString(), banker.pointValue());
     }
     if (bankerGetsThirdCard(player, banker)) {
       System.out.println("Banker gets a card...");
       banker.add(shoe.draw());
-      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n",
+          player.toString(), player.pointValue(), banker.toString(), banker.pointValue());
     }
     // TODO determine if won.
     finalResult = String.format("%n%s - You won $$%d", whoWon(player, banker).getValue(), amount);

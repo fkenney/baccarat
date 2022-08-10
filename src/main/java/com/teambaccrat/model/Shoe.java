@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 public class Shoe {
+
   private final List<Card> cards;
   private final Random random;
   private final int reshuffleCount;
@@ -16,12 +17,12 @@ public class Shoe {
   private boolean reshuffleNeeded = true;
 
   public Shoe(int numDecks, Random random, double markerPoint) {
-    this.cards = new ArrayList<>(Suit.values().length* Rank.values().length* numDecks);
+    this.cards = new ArrayList<>(Suit.values().length * Rank.values().length * numDecks);
     this.random = random;
 
-    for(int i=0; i< numDecks; i++){
-      for(Suit suit: Suit.values()){
-        for(Rank rank: Rank.values()){
+    for (int i = 0; i < numDecks; i++) {
+      for (Suit suit : Suit.values()) {
+        for (Rank rank : Rank.values()) {
           Card card = new Card(rank, suit);
           cards.add(card);
         }
@@ -31,8 +32,8 @@ public class Shoe {
     reshuffleCount = (int) (cards.size() * markerPoint);
   }
 
-  public void startGame(){
-    if(dealCount > reshuffleCount){
+  public void startGame() {
+    if (dealCount > reshuffleCount) {
       Collections.shuffle(cards, random);
       dealCount = 0;
       iterator = cards.iterator();
