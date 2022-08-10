@@ -43,6 +43,7 @@ public class Controller {
     updateView();
   }
 
+
   public void setAmount () throws IllegalWagerAmountException{
     try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
       System.out.println("How much do you want to bet?");
@@ -57,10 +58,6 @@ public class Controller {
 
 
 
-
-    updateView();
-  }
-
   public void startGame() {
     game.start((hand,isPlayer) -> {
       System.out.println("dealt to " + (isPlayer? "player" : "banker") + ": " + hand.getLastCard() + "\n" + hand);
@@ -72,7 +69,21 @@ public class Controller {
     });
   }
 
-  public static void updateView() {
+  public void presentBet() {
+    view.printBetInfo(game);
+
+  }
+
+  public void presentAmount() {
+    view.printAmountInfo(game);
+  }
+
+  public void presentGreeting() {
+    view.printGreeting();
+  }
+
+  public void presentIllegalBetError() {
+    view.printIllegalBetError();
 
   }
 

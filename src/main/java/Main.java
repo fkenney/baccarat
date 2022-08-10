@@ -1,8 +1,6 @@
 import com.teambaccrat.controller.Controller;
 import com.teambaccrat.model.Balance;
 import com.teambaccrat.model.Game;
-import com.teambaccrat.model.exception.IllegalBetException;
-import com.teambaccrat.model.exception.IllegalWagerAmountException;
 import com.teambaccrat.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,17 +29,20 @@ public class Main {
 
 
 
-  public static boolean continueGame() throws IOException {
-    System.out.println("Do you want to play again? 1.Yes 2.No");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String userInput = reader.readLine();
-    boolean gameContinue;
-    if (userInput.equals("1")) {
-      gameContinue = true;
-    } else if (userInput.equals("2")) {
-      gameContinue = false;
-    } else {
-      throw new IllegalBetException("please, put the valid number. 1.Yes 2.No");
+    public static boolean continueGame () throws IOException {
+      System.out.println("Do you want to play again? 1.Yes 2.No");
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+      String userInput = reader.readLine();
+      boolean gameContinue;
+      if (userInput.equals("1")) {
+        gameContinue = true;
+      } else if (userInput.equals("2")) {
+        gameContinue = false;
+      } else {
+//        throw new NoValidInputException("please, put the valid number. 1.Yes 2.No");
+      }
+      return gameContinue;
+
     }
     return gameContinue;
   }
