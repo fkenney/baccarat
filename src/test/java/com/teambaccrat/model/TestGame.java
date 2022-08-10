@@ -61,12 +61,12 @@ public class TestGame {
     String userBet = "1";
     Game game = new Game(amount, userBet);
 
-    Bet bet = game.
+    Bet bet = game.getBet();
 
     Result result = Result.BANKER;
 
+    game.updateBalance(result, bet);
 
-    updateBalance(result, bet);
   }
 
 }

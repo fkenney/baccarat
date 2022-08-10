@@ -72,9 +72,12 @@ public class Game {
     return amount;
   }
 
-  private void updateBalance(Result result, Bet bet){
+  public void updateBalance(Result result, Bet bet){
      if (result.toString().equals(bet.toString())){
-       System.out.println("idk if this works lol");
+       System.out.println("You won some money");
+     }
+     else{
+       System.out.println("You loss some money");
      }
   }
   private boolean playerGetsThirdCard(Hand player) {
