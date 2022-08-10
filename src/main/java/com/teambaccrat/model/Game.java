@@ -6,6 +6,8 @@ import com.teambaccrat.model.exception.NoBalanceException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class Game {
 
@@ -149,18 +151,24 @@ public class Game {
     return winResult;
   }
 
-  public void start() {
+  public void start(BiConsumer<Hand, Boolean> consumer) {
     shoe.startGame();
     player.add(shoe.draw());
+    consumer.accept(player, true);
     banker.add(shoe.draw());
+    consumer.accept(banker, false);
     player.add(shoe.draw());
+    consumer.accept(player, true);
     banker.add(shoe.draw());
+    consumer.accept(banker, false);
 
     if (playerGetsThirdCard(player)) {
       player.add(shoe.draw());
+      consumer.accept(player, true);
     }
     if (bankerGetsThirdCard(player, banker)) {
       banker.add(shoe.draw());
+      consumer.accept(banker,false);
     }
     setGameResult(whoWon(player, banker));
   }

@@ -1,9 +1,7 @@
 import com.teambaccrat.controller.Controller;
 import com.teambaccrat.model.Balance;
-import com.teambaccrat.model.Bet;
 import com.teambaccrat.model.Game;
-import com.teambaccrat.model.exception.IllegalBetException;
-import com.teambaccrat.model.exception.NoBalanceException;
+import com.teambaccrat.model.exception.NoValidInputException;
 import com.teambaccrat.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,7 +40,7 @@ public class Main {
       } else if (userInput.equals("2")) {
         gameContinue = false;
       } else {
-        throw new IllegalArgumentException("please, put the valid number. 1.Yes 2.No");
+        throw new NoValidInputException("please, put the valid number. 1.Yes 2.No");
       }
       return gameContinue;
     }
@@ -50,7 +48,6 @@ public class Main {
 
 
 
-  // need to work on maxBet and minBet.
 
 
 

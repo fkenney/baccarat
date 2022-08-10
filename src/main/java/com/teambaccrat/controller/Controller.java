@@ -55,25 +55,19 @@ public class Controller {
   }
 
   public void startGame() {
-    game.start();
+    game.start((hand,isPlayer) -> {
+      System.out.println("dealt to " + (isPlayer? "player" : "banker") + ": " + hand.getLastCard() + "\n" + hand);
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        // ignore exception
+      }
+    });
   }
-
-
-
-//
-//  public String setPlayerHandOutPut() {
-//    return view.setHandOutPut(
-//        String.format("The player has %s, %s ", game.getPlayerHand(), game.getPlayerPoints()));
-//  }
-//
-//  public String setBankerHandOutPut() {
-//    return view.setHandOutput(
-//        String.format("The player has %s, %s", game.getPlayerHand(), game.getBankerPoints()));
-//  }
-
-
 
   public static void updateView() {
 
   }
+
+
 }
