@@ -70,8 +70,8 @@ public class Game {
     return amount;
   }
 
-  public Balance getBalance() {
-    return balance;
+  public int getBalance() {
+    return Balance.getBalance();
   }
 
   public void setGameResult(Result result){
@@ -93,11 +93,11 @@ public class Game {
     return result.toString().equals(bet.toString());
   }
 
-  private boolean playerGetsThirdCard(Hand player) {
+  public boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
   }
 
-  private boolean bankerGetsThirdCard(Hand player, Hand banker) {
+  public boolean bankerGetsThirdCard(Hand player, Hand banker) {
     boolean getThirdCard = false;
     int valueOfLastPlayerCard = player.getLastCard().getRank().getPoint();
     int bankerPoints = banker.pointValue();
