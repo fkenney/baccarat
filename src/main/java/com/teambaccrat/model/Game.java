@@ -55,7 +55,8 @@ public class Game {
     int currentBalance = Balance.getBalance();
     if (amount < MIN_BET || amount > MAX_BET) {
       throw new IllegalWagerAmountException(
-          String.format("Wager amount must be a minimum of %d  and  a maximum of - %d", MIN_BET,MAX_BET));
+          String.format("Wager amount must be a minimum of %d  and  a maximum of - %d", MIN_BET,
+              MAX_BET));
     }
     if (amount > currentBalance) {
       throw new NoBalanceException(String.format("You don't have enough money to make that bet, Current Balance =$ %d ",getBalance()));

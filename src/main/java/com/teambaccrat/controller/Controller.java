@@ -68,12 +68,12 @@ public class Controller {
   }
 
   public void presentBet() {
-    //view.printBetInfo(game);
+    view.printBetInfo(game);
 
   }
 
   public void presentAmount() {
-    //view.printAmountInfo(game);
+    view.printAmountInfo(game);
   }
 
   public void presentGreeting() {

@@ -9,11 +9,10 @@ import java.io.InputStreamReader;
 public class Main {
 
 
-  public static void main(String[] args) throws IOException {
+ public static void main(String[] args) throws IOException {
 
     Game game = new Game();
     View view = new View();
-
     Controller c = new Controller(game, view);
 
     boolean run = true;
@@ -29,6 +28,7 @@ public class Main {
   }
 
 
+
     public static boolean continueGame () throws IOException {
       System.out.println("Do you want to play again? 1.Yes 2.No");
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -42,8 +42,11 @@ public class Main {
 //        throw new NoValidInputException("please, put the valid number. 1.Yes 2.No");
       }
       return gameContinue;
+
     }
+    return gameContinue;
   }
+}
 
 
 
