@@ -12,12 +12,12 @@ public class Main {
   public static void main(String[] args) throws IOException {
     boolean run = true;
     while (run) {
-      String bet = getBet();
+/*      String bet = getBet();
       int amount = getAmount();
       System.out.println("You bet $" + amount + " on " + Bet.getName(bet) + ".");
       Game game = new Game(amount, bet);
       game.start();
-      run = continueGame();
+      run = continueGame();*/
     }
     System.out.println("Thank you for playing Baccarat. Your result is : Balance: " + Balance.getBalance() + " total play, win, lose" );
   // showing balance, total game played, wins, lose.

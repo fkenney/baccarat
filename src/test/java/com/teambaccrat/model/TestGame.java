@@ -11,9 +11,9 @@ public class TestGame {
   @Test
   public void testThrowsIllegalBet() {
     try {
-      int amount = 50;
-      String bet = "8";
-      Game game = new Game(amount, bet);
+      Game game = new Game();
+      game.setBet("8");
+      game.setAmount(50);
     } catch (IllegalBetException e) {
        assertInstanceOf(IllegalBetException.class, e);
     }
@@ -22,23 +22,24 @@ public class TestGame {
   @Test
   void playerGetsThirdCard() {
     Balance b = new Balance(1000);
-    int amount = 100;
-    String bet = "1";
-    Game game = new Game(amount, bet);
+    Game game = new Game();
+    game.setBet("1");
+    game.setAmount(50);
+
     Card card1 = new Card(Rank.ACE, Suit.CLUBS);
     Card card2 = new Card(Rank.THREE, Suit.SPADES);
     Hand playerHand = new Hand();
     playerHand.add(card1);
     playerHand.add(card2);
-   // assertTrue(game.playerGetsThirdCard(playerHand));
+    assertTrue(game.playerGetsThirdCard(playerHand));
   }
 
   @Test
   void bankerGetsThirdCard() {
-    Balance b = new Balance(1000);
-    int amount = 100;
-    String bet = "1";
-    Game game = new Game(amount, bet);
+     Game game = new Game();
+     game.setBet("1");
+     game.setAmount(50);
+
     // Player Cards
     Card card1 = new Card(Rank.ACE, Suit.CLUBS);
     Card card2 = new Card(Rank.THREE, Suit.SPADES);
@@ -51,22 +52,20 @@ public class TestGame {
     Hand bankerHand = new Hand();
     playerHand.add(card1);
     playerHand.add(card2);
-   // assertTrue(game.bankerGetsThirdCard(playerHand, bankerHand));
+    assertTrue(game.bankerGetsThirdCard(playerHand, bankerHand));
   }
 
   @Test
   void updateBalance(){
-    Balance b = new Balance(1000);
-    int amount = 100;
-    String userBet = "1";
-    Game game = new Game(amount, userBet);
-
-    Bet bet = game.getBet();
-
+    Game game = new Game();
+    game.setBet("1");
+    game.setAmount(50);
     Result result = Result.BANKER;
-
+    Bet bet = Bet.BANKER;
     game.updateBalance(result, bet);
-
+    assertEquals(1050, game.getBalance());
   }
+
+
 
 }
