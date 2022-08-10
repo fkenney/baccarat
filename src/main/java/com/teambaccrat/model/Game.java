@@ -125,11 +125,6 @@ public class Game {
     System.out.println(finalResult);
   }
 
-  public void adjustBalance(Result result, Game amount){
-
-  }
-
-
   public enum Result {
     PLAYER_WIN("Player Wins!"),
     BANKER_WIN("Banker Wins!"),
