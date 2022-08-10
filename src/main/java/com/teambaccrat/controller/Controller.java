@@ -1,27 +1,24 @@
 package com.teambaccrat.controller;
 
 import com.teambaccrat.model.Balance;
-import com.teambaccrat.model.Bet;
 import com.teambaccrat.model.Game;
 import com.teambaccrat.model.exception.IllegalBetException;
-import com.teambaccrat.view.TextGamePresentation;
 import com.teambaccrat.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import org.w3c.dom.Text;
+
 
 public class Controller {
 
   private static Game game;
   private View view;
 
-  public Controller (Game game, View view){
+  public Controller(Game game, View view) {
     super();
     this.game = game;
-    this. view = view;
+    this.view = view;
   }
-
 
   public static void setBet() throws IOException {
     System.out.println(
@@ -44,23 +41,48 @@ public class Controller {
     game.setBet(bet);
   }
 
-  public Bet getBet(){
-    return game.getBet();
-  }
-
-  public static void setAmount() throws IOException {
+  public void setAmount() throws IOException {
     Balance balance = new Balance(Balance.getBalance());
     System.out.println("How much do you want to bet?");
     BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String amount = reader.readLine();
-    System.out.println(amount);
-    System.out.println("You put $" + amount);
-    game.setAmount(Integer.parseInt(amount));
+    String userAmount = reader.readLine();
+    System.out.println(userAmount);
+    System.out.println("You put $" + userAmount);
+    int amount = Integer.parseInt(userAmount);
+    game.setAmount(amount);
   }
 
-  public int getAmount(){
-    return game.getAmount();
+  public void startGame() {
+    game.start();
   }
 
 
+  public String setResultOutput() {
+    return view.setResultOutput(String.format(game.getGameResult()));
   }
+
+  public String setPlayerHandOutPut() {
+    return view.setHandOutPut(
+        String.format("The player has %s, %s ", game.getPlayerHand(), game.getPlayerPoints()));
+  }
+
+  public String setBankerHandOutPut() {
+    return view.setHandOutput(
+        String.format("The player has %s, %s", game.getPlayerHand(), game.getBankerPoints()));
+  }
+
+  public static boolean continueGame() throws IOException {
+    System.out.println("Do you want to play again? 1.Yes 2.No");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    String userInput = reader.readLine();
+    boolean gameContinue;
+    if (userInput.equals("1")) {
+      gameContinue = true;
+    } else if (userInput.equals("2")) {
+      gameContinue = false;
+    } else {
+      throw new IllegalArgumentException("please, put the valid number. 1.Yes 2.No");
+    }
+    return gameContinue;
+  }
+}

@@ -131,7 +131,7 @@ public class Game {
     return getThirdCard;
   }
 
-  private Result whoWon(Hand player, Hand banker) {
+  public Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
     Result winResult = null;

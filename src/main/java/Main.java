@@ -14,9 +14,9 @@ public class Main {
     while (run) {
 //      String bet = getBet();
 //      int amount = getAmount();
-      System.out.println("You bet $" + amount + " on " + Bet.getName(bet) + ".");
-      Game game = new Game(amount, bet);
-      game.start();
+//      System.out.println("You bet $" + amount + " on " + Bet.getName(bet) + ".");
+//      Game game = new Game(amount, bet);
+//      game.start();
       run = continueGame();
     }
     System.out.println("Thank you for playing Baccarat. Your result is : Balance: " + Balance.getBalance() + " total play, win, lose" );
