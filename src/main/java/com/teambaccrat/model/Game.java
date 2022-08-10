@@ -21,7 +21,6 @@ public class Game {
   private int amount;
   private Result finalResult;
 
-
   public Game() {
     player = new Hand();
     banker = new Hand();
@@ -77,8 +76,22 @@ public class Game {
   public void setGameResult(Result result){
     finalResult = result;
   }
+
   public String getGameResult(){
     return finalResult.getValue();
+  }
+
+  public String getPlayerHand(){
+    return player.toString();
+  }
+  public String getBankerHand(){
+    return banker.toString();
+  }
+  public int getPlayerPoints(){
+    return player.pointValue();
+  }
+  public int getBankerPoints(){
+    return banker.pointValue();
   }
 
   public void updateBalance(Result result, Bet bet) {
