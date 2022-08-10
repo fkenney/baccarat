@@ -1,6 +1,5 @@
 package com.teambaccrat.model;
 
-import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
 import java.security.SecureRandom;
 import java.util.Objects;
@@ -102,7 +101,6 @@ public class Game {
     return winResult;
   }
 
-
   public void start() {
     // TODO refactor strings better.
     shoe.startGame();
@@ -125,6 +123,10 @@ public class Game {
     // TODO determine if won.
     finalResult = String.format("%n%s - You won $$%d", whoWon(player, banker).getValue(), amount);
     System.out.println(finalResult);
+  }
+
+  public void adjustBalance(Result result, Game amount){
+
   }
 
 
