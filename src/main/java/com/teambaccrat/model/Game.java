@@ -1,6 +1,8 @@
 package com.teambaccrat.model;
 
 import com.teambaccrat.model.exception.IllegalBetException;
+import com.teambaccrat.model.exception.IllegalWagerAmountException;
+import com.teambaccrat.model.exception.NoBalanceException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
@@ -25,7 +27,7 @@ public class Game {
     player = new Hand();
     banker = new Hand();
     setBet(userBet);
-    this.amount = amount;
+    setAmount(amount);
     Random rnd = new SecureRandom();
     int numDecks = 8;
     double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
@@ -48,16 +50,25 @@ public class Game {
   }
 
   private void setAmount(int amount) {
+        int currentBalance = Balance.getBalance();
       if(amount < MIN_BET && amount > MAX_BET){
-
+          throw new IllegalWagerAmountException(String.format("Wage amount must be between Min bet -%d  and  Max bet - %d", MIN_BET, MAX_BET));
       }
+      if(amount > currentBalance){
+         throw new NoBalanceException("You don't have enough money to make that bet");
+      }
+      // TODO this may need to be checked in a different method
+      if(currentBalance < MIN_BET){
+        throw new NoBalanceException("You don't have enough money to bet");
+      }
+      this.amount = amount;
   }
 
-  public boolean playerGetsThirdCard(Hand player) {
+  private boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
   }
 
-  public boolean bankerGetsThirdCard(Hand player, Hand banker) {
+  private boolean bankerGetsThirdCard(Hand player, Hand banker) {
     boolean getThirdCard = false;
     int valueOfLastPlayerCard = player.getLastCard().getRank().getPoint();
     int bankerPoints = banker.pointValue();
@@ -91,7 +102,7 @@ public class Game {
     return getThirdCard;
   }
 
-  public Result whoWon(Hand player, Hand banker) {
+  private Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
     Result winResult = null;
@@ -137,7 +148,7 @@ public class Game {
     System.out.println(finalResult);
   }
 
-  public enum Result {
+  private enum Result {
     PLAYER_WIN("Player Wins!"),
     BANKER_WIN("Banker Wins!"),
     TIE("Tie!");
