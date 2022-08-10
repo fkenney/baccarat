@@ -3,6 +3,7 @@ package com.teambaccrat.controller;
 import com.teambaccrat.model.Balance;
 import com.teambaccrat.model.Game;
 import com.teambaccrat.model.exception.IllegalBetException;
+import com.teambaccrat.model.exception.IllegalWagerAmountException;
 import com.teambaccrat.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,19 +40,20 @@ public class Controller {
           "Please, place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie");
     }
     game.setBet(bet);
-    updateView();
+    //view.presentBet
   }
 
-  public void setAmount () throws IOException {
-    Balance balance = new Balance(Balance.getBalance());
-    System.out.println("How much do you want to bet?");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String userAmount = reader.readLine();
-    System.out.println(userAmount);
-    System.out.println("You put $" + userAmount);
-    int amount = Integer.parseInt(userAmount);
-    game.setAmount(amount);
-    presentBet();
+  public void setAmount () throws IllegalWagerAmountException {
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+      System.out.println("How much do you want to bet?");
+      String userAmount = reader.readLine();
+      game.setAmount(Integer.parseInt(userAmount));
+      //presentAmount();
+    } catch (IllegalWagerAmountException e) {
+      System.out.println(e.getMessage());
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public void startGame() {
@@ -66,20 +68,20 @@ public class Controller {
   }
 
   public void presentBet() {
-    view.printBetInfo(game);
+    //view.printBetInfo(game);
 
   }
 
   public void presentAmount() {
-    view.printAmountInfo(game);
+    //view.printAmountInfo(game);
   }
 
   public void presentGreeting() {
-    view.printGreeting();
+    //view.printGreeting();
   }
 
   public void presentIllegalBetError() {
-    view.printIllegalBetError();
+    //view.printIllegalBetError();
 
   }
 
