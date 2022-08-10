@@ -51,7 +51,7 @@ public class Controller {
     System.out.println("You put $" + userAmount);
     int amount = Integer.parseInt(userAmount);
     game.setAmount(amount);
-    updateView();
+    presentBet();
   }
 
   public void startGame() {
@@ -65,7 +65,21 @@ public class Controller {
     });
   }
 
-  public static void updateView() {
+  public void presentBet() {
+    view.printBetInfo(game);
+
+  }
+
+  public void presentAmount() {
+    view.printAmountInfo(game);
+  }
+
+  public void presentGreeting() {
+    view.printGreeting();
+  }
+
+  public void presentIllegalBetError() {
+    view.printIllegalBetError();
 
   }
 

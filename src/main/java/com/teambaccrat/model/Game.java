@@ -184,6 +184,7 @@ public class Game {
       consumer.accept(banker,false);
     }
     setGameResult(whoWon(player, banker));
+
   }
 
   public enum Result {
