@@ -1,38 +1,39 @@
 package com.teambaccrat.model;
 
-import com.teambaccrat.model.exception.GameFinishedException;
 import com.teambaccrat.model.exception.IllegalBetException;
+import com.teambaccrat.model.exception.IllegalWagerAmountException;
+import com.teambaccrat.model.exception.NoBalanceException;
 import java.security.SecureRandom;
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.BiConsumer;
+
 
 public class Game {
 
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
+  private static final int MAX_BET = 100;
+  private static final int MIN_BET = 20;
   private final Hand player;
   private final Hand banker;
   private final Shoe shoe;
+  private Balance balance;
   private Bet bet;
   private int amount;
+  private Result finalResult;
 
-  private String initialHands;
-  private String finalResult;
-
-
-  public Game(int amount, String userBet) {
-      player = new Hand();
-      banker = new Hand();
-      setBet(userBet);
-      this.amount = amount;
-      Random rnd = new SecureRandom();
-      int numDecks = 8;
-      double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
-      shoe = new Shoe(numDecks, rnd, markerPoint);
-
+  public Game() {
+    player = new Hand();
+    banker = new Hand();
+    balance = new Balance(1000);
+    Random rnd = new SecureRandom();
+    int numDecks = 8;
+    double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
+    shoe = new Shoe(numDecks, rnd, markerPoint);
   }
 
-  private void setBet(String userBet) {
+  public void setBet(String userBet) {
     if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
       throw new IllegalBetException(
           "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
@@ -44,6 +45,67 @@ public class Game {
         }
       }
     }
+  }
+
+  public Bet getBet() {
+    return bet;
+  }
+
+  public void setAmount(int amount) {
+    int currentBalance = Balance.getBalance();
+    if (amount < MIN_BET || amount > MAX_BET) {
+      throw new IllegalWagerAmountException(
+          String.format("Wage amount must be between Min bet -%d  and  Max bet - %d", MIN_BET,
+              MAX_BET));
+    }
+    if (amount > currentBalance) {
+      throw new NoBalanceException("You don't have enough money to make that bet");
+    }
+    if (currentBalance < MIN_BET) {
+      throw new NoBalanceException("You don't have enough money to bet");
+    }
+    this.amount = amount;
+  }
+
+  public int getAmount() {
+    return amount;
+  }
+
+  public int getBalance() {
+    return Balance.getBalance();
+  }
+
+  public void setGameResult(Result result){
+    finalResult = result;
+  }
+
+  public String getGameResult(){
+    return finalResult.getValue();
+  }
+
+  public String getPlayerHand(){
+    return player.toString();
+  }
+  public String getBankerHand(){
+    return banker.toString();
+  }
+  public int getPlayerPoints(){
+    return player.pointValue();
+  }
+  public int getBankerPoints(){
+    return banker.pointValue();
+  }
+
+  public void updateBalance(Result result, Bet bet) {
+    if (userWon(result, bet)) {
+      balance.add(amount);
+    } else {
+      balance.subtract(amount);
+    }
+  }
+
+  public boolean userWon(Result result, Bet bet) {
+    return result.toString().equals(bet.toString());
   }
 
   public boolean playerGetsThirdCard(Hand player) {
@@ -89,50 +151,45 @@ public class Game {
     int bankerPoints = banker.pointValue();
     Result winResult = null;
     if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
-      winResult = Result.PLAYER_WIN;
+      winResult = Result.PLAYER;
     } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
-      winResult = Result.BANKER_WIN;
+      winResult = Result.BANKER;
     } else if (playerPoints == bankerPoints) {
       winResult = Result.TIE;
     } else if (bankerPoints > playerPoints) {
-      winResult = Result.BANKER_WIN;
+      winResult = Result.BANKER;
     } else {
-      winResult = Result.PLAYER_WIN;
+      winResult = Result.PLAYER;
     }
     return winResult;
   }
 
-
-  public void start() {
-    // TODO refactor strings better.
+  public void start(BiConsumer<Hand, Boolean> consumer) {
     shoe.startGame();
     player.add(shoe.draw());
+    consumer.accept(player, true);
     banker.add(shoe.draw());
+    consumer.accept(banker, false);
     player.add(shoe.draw());
+    consumer.accept(player, true);
     banker.add(shoe.draw());
-    initialHands = String.format("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
-    System.out.println(initialHands);
+    consumer.accept(banker, false);
+
     if (playerGetsThirdCard(player)) {
-      System.out.println("Player gets a card");
       player.add(shoe.draw());
-      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      consumer.accept(player, true);
     }
     if (bankerGetsThirdCard(player, banker)) {
-      System.out.println("Banker gets a card...");
       banker.add(shoe.draw());
-      System.out.printf("%nPlayer has cards %s = %d points %nBanker has cards %s = %d points%n", player.toString(),player.pointValue(), banker.toString(), banker.pointValue());
+      consumer.accept(banker,false);
     }
-    // TODO determine if won.
-    finalResult = String.format("%n%s - You won $$%d", whoWon(player, banker).getValue(), amount);
-    System.out.println(finalResult);
+    setGameResult(whoWon(player, banker));
   }
 
-
   public enum Result {
-    PLAYER_WIN("Player Wins!"),
-    BANKER_WIN("Banker Wins!"),
+    PLAYER("Player Wins!"),
+    BANKER("Banker Wins!"),
     TIE("Tie!");
-
     private final String value;
 
     Result(String value) {
@@ -143,5 +200,4 @@ public class Game {
       return value;
     }
   }
-
 }

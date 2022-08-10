@@ -14,5 +14,4 @@ public class GameFinishedException extends IllegalStateException {
     super(message, cause);
   }
 
-
 }

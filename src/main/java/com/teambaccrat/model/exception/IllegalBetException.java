@@ -1,6 +1,7 @@
 package com.teambaccrat.model.exception;
 
-public class IllegalBetException extends  IllegalArgumentException{
+public class IllegalBetException extends IllegalArgumentException {
+
   public IllegalBetException(String message) {
     super(message);
   }

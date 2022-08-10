@@ -16,4 +16,14 @@ public enum Bet {
   public String getSymbol() {
     return symbol;
   }
+
+  public static Bet getName(String value) {
+    for(Bet e: Bet.values()){
+      if(e.symbol.equals(value)){
+        return e;
+      }
+    }return null;
+  }
+
+
 }
