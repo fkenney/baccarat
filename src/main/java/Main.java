@@ -12,8 +12,8 @@ public class Main {
   public static void main(String[] args) throws IOException {
     boolean run = true;
     while (run) {
-      String bet = getBet();
-      int amount = getAmount();
+//      String bet = getBet();
+//      int amount = getAmount();
       System.out.println("You bet $" + amount + " on " + Bet.getName(bet) + ".");
       Game game = new Game(amount, bet);
       game.start();
@@ -24,39 +24,10 @@ public class Main {
 
   }
 
-  public static String getBet() throws IOException {
-    System.out.println(
-        " Who do you want to put the bet on? 1. Banker 2. Player 3. Tie. Press the number, please");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String bet = reader.readLine();
 
-    if (bet.equals("1")) {
-      System.out.println("You made a bet on Banker");
-    } else if (bet.equals("2")) {
-      System.out.println("You made a bet on Player");
-
-    } else if (bet.equals("3")) {
-      System.out.println("You made a bet on Tie");
-
-    } else {
-      throw new IllegalBetException("Please, place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie");
-    }
-    return bet;
-  }
 
   // need to work on maxBet and minBet.
-  public static int getAmount() throws IOException {
-    Balance balance = new Balance(Balance.getBalance());
-    System.out.println("How much do you want to bet?");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String amount = reader.readLine();
-    System.out.println(amount);
-//    int betAmount = Integer.getInteger(amount);
 
-    System.out.println("You put $" + amount);
-
-    return Integer.parseInt(amount);
-    }
 
 
   
