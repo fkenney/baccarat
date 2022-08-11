@@ -51,13 +51,20 @@ public class Controller {
 
   public void setAmount () throws IOException {
 
-    int amount;
-    String userAmount;
-    do{ System.out.println(" How much do you want to bet on " + getBet() + "? \n Your current Balance is : " + game.getBalance()
+    int amount = 0;
+    String userAmount = null;
+    do{
+      System.out.println("How much do you want to bet on " + getBet() + "? \n Your current Balance is : " + game.getBalance()
         + "Min: 20, Max: 100 " );
-      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-      userAmount = reader.readLine();
-      amount = Integer.parseInt(userAmount);
+      try {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        userAmount = reader.readLine();
+        amount = Integer.parseInt(userAmount);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } catch (NumberFormatException e) {
+        continue;
+      }
     } while (!isValidAmount(amount));
     game.setAmount(amount);
     presentAmount(userAmount);
