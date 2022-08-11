@@ -34,7 +34,7 @@ public class Main {
     String userInput;
     boolean gameContinue = false;
     do {
-      System.out.println("Do you want to play again? 1.Yes 2.No");
+      System.out.println("Dealer: Do you want to play again? 1.Yes 2.No");
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
       userInput = reader.readLine();
     } while (!isValid(Integer.parseInt(userInput)));

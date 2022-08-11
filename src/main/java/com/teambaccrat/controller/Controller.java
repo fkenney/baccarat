@@ -79,9 +79,9 @@ public class Controller {
   public void startGame() {
     presentGameStart();
     game.start((hand, isPlayer) -> {
-      presentCards(hand, isPlayer);
+      presentCards(hand, isPlayer );
       try {
-        Thread.sleep(1000);
+        Thread.sleep(1500);
       } catch (InterruptedException e) {
         // ignore exception
       }
@@ -116,7 +116,7 @@ public class Controller {
     System.out.printf(view.gameStartPresentation(),game.getAmount(), getBet(), game.getBalance());
   }
   public void presentCards(Hand hand, boolean isPlayer){
-    System.out.printf(view.cardPresentation(), (isPlayer ? "player":"banker"), hand.getLastCard(), hand);
+    System.out.printf(view.cardPresentation(), (isPlayer ? "player":"banker"), hand.getLastCard(), hand.getLastCard().getRank().getPoint(), hand, hand.pointValue());
   }
   public void presentGameResults(){
     System.out.printf(view.getGameResultPresentation(), game.getGameResult(), (game.getUserWon()? "You Won!(+": "You Loss(-"),game.getAmount(), game.getBalance());
