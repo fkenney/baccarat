@@ -25,8 +25,8 @@ public class Game {
 
   ///-------------Constructor -----------------------//
 
-  public Game() {
-    balance = new Balance(1000);
+  public Game(int initialBalance) {
+    balance = new Balance(initialBalance);
     Random rnd = new SecureRandom();
     int numDecks = 8;
     double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
@@ -56,7 +56,7 @@ public class Game {
     int balance = getBalance();
     if (amount < MIN_BET || amount > MAX_BET) {
       throw new IllegalWagerAmountException(
-          String.format("Wager amount must be a minimum of %d  or a maximum of %d%n",
+          String.format("Wager amount must be in between a minimum of %d and a maximum of %d%n",
               MIN_BET,
               MAX_BET));
     }

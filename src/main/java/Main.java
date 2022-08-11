@@ -8,23 +8,25 @@ import java.io.InputStreamReader;
 
 public class Main {
 
+  private static final int DEFAULT_INITIAL_BALANCE = 1000;
 
   public static void main(String[] args) throws IOException {
 
-    Game game = new Game();
+    Game game = new Game((args.length > 0) ? Integer.parseInt(args[0]) : DEFAULT_INITIAL_BALANCE);
     View view = new View();
     Controller c = new Controller(game, view);
     c.presentGreeting();
 
     boolean run = true;
-    while (run) {
+
+    do {
       c.setBet();
       c.setAmount();
       c.startGame();
       run = c.isValidBalance() && continueGame();
-    }
+    } while (run);
     System.out.println(
-        "Thank you for playing Baccarat. Your result is : Balance: " + Balance.getBalance()
+        "Thank you for playing Baccarat. Your Balance: " + Balance.getBalance()
     );
   }
 
