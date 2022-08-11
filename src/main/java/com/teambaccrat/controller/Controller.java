@@ -91,7 +91,7 @@ public class Controller {
   public Boolean isValidBalance() {
     int balance = getBalance();
     if (balance < 20) {
-      System.out.printf("You don't have enough money to make that bet, Current Balance $ %d%n", balance );
+      System.out.printf("You don't have enough money to make that play, Current Balance $ %d%n", balance );
       return false;
     }else{
       return true;
