@@ -14,6 +14,7 @@ public class Main {
     Game game = new Game();
     View view = new View();
     Controller c = new Controller(game, view);
+    c.presentGreeting();
 
     boolean run = true;
     while (run) {

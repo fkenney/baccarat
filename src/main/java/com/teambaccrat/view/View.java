@@ -3,12 +3,12 @@ import com.teambaccrat.model.Game;
 
 public class View {
 
-  public void printBetInfo(Game game) {
-    System.out.println("You made a bet on " + game);
+  public void printBetInfo(String bet) {
+    System.out.println("You made a bet on " + bet);
   }
 
-  public void printAmountInfo(Game game) {
-    System.out.println("You bet $" + game);
+  public void printAmountInfo(String amount) {
+    System.out.println("You bet $" + amount);
   }
 
   public void printGreeting() {
@@ -16,7 +16,7 @@ public class View {
   }
 
   public void printIllegalBetError() {
-    System.out.println("Welcome to the Baccarat table!");
+    System.out.println("Please, made a valid bet");
   }
 
 }
