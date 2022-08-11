@@ -15,8 +15,8 @@ public class Game {
   private static final double MARKER_MAX = 0.8;
   private static final int MAX_BET = 100;
   private static final int MIN_BET = 20;
-  private final Hand player;
-  private final Hand banker;
+  private Hand player;
+  private Hand banker;
   private final Shoe shoe;
   private Balance balance;
   private Bet bet;
@@ -24,8 +24,6 @@ public class Game {
   private Result finalResult;
 
   public Game() {
-    player = new Hand();
-    banker = new Hand();
     balance = new Balance(1000);
     Random rnd = new SecureRandom();
     int numDecks = 8;
@@ -165,6 +163,9 @@ public class Game {
   }
 
   public void start(BiConsumer<Hand, Boolean> consumer) {
+    player = new Hand();
+    banker = new Hand();
+
     shoe.startGame();
     player.add(shoe.draw());
     consumer.accept(player, true);
@@ -184,6 +185,7 @@ public class Game {
       consumer.accept(banker,false);
     }
     setGameResult(whoWon(player, banker));
+    updateBalance(finalResult, bet);
 
   }
 
