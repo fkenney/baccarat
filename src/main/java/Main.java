@@ -25,7 +25,7 @@ public class Main {
     }
     System.out.println(
         "Thank you for playing Baccarat. Your result is : Balance: " + Balance.getBalance()
-            + " total play, win, lose");
+    );
   }
 
 
