@@ -52,6 +52,8 @@ public class TestGame {
     Hand bankerHand = new Hand();
     playerHand.add(card1);
     playerHand.add(card2);
+    bankerHand.add(card3);
+    bankerHand.add(card4);
 //    assertTrue(game.bankerGetsThirdCard(playerHand, bankerHand));
   }
 
@@ -66,6 +68,30 @@ public class TestGame {
     assertEquals(1050, game.getBalance());
   }
 
+  @Test
+  void whoWon_BANKER_WIN(){
+    Game game = new Game();
+    game.setBet("1");
+    game.setAmount(50);
+
+    // Player Cards
+    Card card1 = new Card(Rank.JACK, Suit.CLUBS);
+    Card card2 = new Card(Rank.JACK, Suit.SPADES);
+    Card card3 = new Card(Rank.EIGHT, Suit.SPADES);
+    // Banker Cards
+    Card card4 = new Card(Rank.NINE, Suit.CLUBS);
+    Card card5 = new Card(Rank.JACK, Suit.SPADES);
+
+    Hand playerHand = new Hand();
+    Hand bankerHand = new Hand();
+    playerHand.add(card1);
+    playerHand.add(card2);
+    bankerHand.add(card3);
+    bankerHand.add(card4);
+
+   Result result = game.whoWon(playerHand, bankerHand);
+   assertEquals(Result.BANKER, result);
+  }
 
 
 }

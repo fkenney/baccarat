@@ -10,7 +10,6 @@ import java.util.function.BiConsumer;
 
 
 public class Game {
-  ///-------------Fields -----------------------//
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
   public static final int MAX_BET = 100;
@@ -159,13 +158,13 @@ public class Game {
     return getThirdCard;
   }
 
-  private Result whoWon(Hand player, Hand banker) {
+  public Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
     Result winResult = null;
-    if ((playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
+    if (player.size() ==2 && (playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
       winResult = Result.PLAYER;
-    } else if ((bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
+    } else if ((banker.size() ==2 && bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
       winResult = Result.BANKER;
     } else if (playerPoints == bankerPoints) {
       winResult = Result.TIE;
