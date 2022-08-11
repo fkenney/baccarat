@@ -1,7 +1,6 @@
 package com.teambaccrat.model;
 
 public enum Suit {
-  //<-- nothing must go above the numerated values in the enum.
   CLUBS('\u2663', Color.BLACK),
   DIAMONDS('\u2662', Color.RED),
   HEARTS('\u2661', Color.RED),

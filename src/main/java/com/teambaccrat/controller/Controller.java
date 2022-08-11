@@ -1,7 +1,6 @@
 package com.teambaccrat.controller;
 
-import com.teambaccrat.model.Balance;
-import com.teambaccrat.model.Bet;
+
 import com.teambaccrat.model.Game;
 import com.teambaccrat.model.Hand;
 import com.teambaccrat.model.exception.IllegalBetException;
@@ -25,14 +24,27 @@ public class Controller {
   }
 
   public static void setBet() throws IOException {
-    String bet;
+    String bet = null;
     do {
       promptBet();
-      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-      bet = reader.readLine();
-    } while (!isValidBet(bet));
-    game.setBet(bet);
+      try{
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        bet = reader.readLine();
+        game.setBet(bet);
+      }
+      catch (IOException e){
+          throw new RuntimeException(e);
+      }
+      catch(IllegalBetException e){
+        System.out.println(e.getMessage());
+        continue;
+      }
+    }while (!isValidBet(bet));
     presentBet(bet);
+  }
+
+  public static String getBet() {
+    return game.getBet().toString();
   }
 
   private static boolean isValidBet(String bet) {
@@ -41,10 +53,6 @@ public class Controller {
     } else {
       return false;
     }
-  }
-
-  public static String getBet() {
-    return game.getBet().toString();
   }
 
   public void setAmount() throws IOException {

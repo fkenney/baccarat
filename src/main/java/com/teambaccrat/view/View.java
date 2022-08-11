@@ -1,6 +1,5 @@
 package com.teambaccrat.view;
 
-import com.teambaccrat.model.Game;
 
 public class View {
 
@@ -55,7 +54,7 @@ public class View {
     return cardPresentation;
   }
 
-  public String getFinalHandValuePresentation(){
+  public String getFinalHandValuePresentation() {
     return finalHandValuePresentation;
   }
 }

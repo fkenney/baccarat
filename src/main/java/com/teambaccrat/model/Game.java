@@ -37,7 +37,7 @@ public class Game {
   public void setBet(String userBet) {
     if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
       throw new IllegalBetException(
-          "Please place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie ");
+          "Please place a valid bet of : 1, 2, or 3");
     } else {
       // Sets bet value to matching Enum Value
       for (Bet b : Bet.values()) {
@@ -56,7 +56,7 @@ public class Game {
     int balance = getBalance();
     if (amount < MIN_BET || amount > MAX_BET) {
       throw new IllegalWagerAmountException(
-          String.format("Wager amount must be at least the minimum of %d  or a maximum of %d%n",
+          String.format("Wager amount must be a minimum of %d  or a maximum of %d%n",
               MIN_BET,
               MAX_BET));
     }
