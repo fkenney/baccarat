@@ -10,11 +10,11 @@ import java.util.function.BiConsumer;
 
 
 public class Game {
-
+  ///-------------Fields -----------------------//
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
-  private static final int MAX_BET = 100;
-  private static final int MIN_BET = 20;
+  public static final int MAX_BET = 100;
+  public static final int MIN_BET = 20;
   private Hand player;
   private Hand banker;
   private final Shoe shoe;
@@ -22,6 +22,9 @@ public class Game {
   private Bet bet;
   private int amount;
   private Result finalResult;
+  private boolean userWon = false;
+
+  ///-------------Constructor -----------------------//
 
   public Game() {
     balance = new Balance(1000);
@@ -31,6 +34,7 @@ public class Game {
     shoe = new Shoe(numDecks, rnd, markerPoint);
   }
 
+  ///-------------Setter/Getters -----------------------//
   public void setBet(String userBet) {
     if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
       throw new IllegalBetException(
@@ -50,17 +54,22 @@ public class Game {
   }
 
   public void setAmount(int amount) {
-    int currentBalance = Balance.getBalance();
+    int balance = getBalance();
     if (amount < MIN_BET || amount > MAX_BET) {
       throw new IllegalWagerAmountException(
-          String.format("Wager amount must be a minimum of %d  and  a maximum of - %d", MIN_BET,
+          String.format("Wager amount must be at least the minimum of %d  or a maximum of %d%n",
+              MIN_BET,
               MAX_BET));
     }
-    if (amount > currentBalance) {
-      throw new NoBalanceException(String.format("You don't have enough money to make that bet, Current Balance =$ %d ",getBalance()));
+    if (amount > balance) {
+      throw new NoBalanceException(
+          String.format("You don't have enough money to make that bet, Current Balance $ %d%n",
+              balance));
     }
-    if (currentBalance < MIN_BET) {
-      throw new NoBalanceException(String.format("You don't have enough money to make bet, Current Balance = $ %d",getBalance()));
+    if (balance < MIN_BET) {
+      throw new NoBalanceException(
+          String.format("You don't have enough money to make bet, Current Balance = $ %d%n",
+              balance));
     }
     this.amount = amount;
   }
@@ -73,37 +82,43 @@ public class Game {
     return Balance.getBalance();
   }
 
-  public void setGameResult(Result result){
+  public void setGameResult(Result result) {
     finalResult = result;
   }
 
-  public String getGameResult(){
+  private void setUserWon(Result result, Bet bet) {
+    userWon = result.toString().equals(bet.toString());
+  }
+
+  public boolean getUserWon() {
+    return userWon;
+  }
+  public String getGameResult() {
     return finalResult.getValue();
   }
 
-  public String getPlayerHand(){
+  public String getPlayerHand() {
     return player.toString();
   }
-  public String getBankerHand(){
+
+  public String getBankerHand() {
     return banker.toString();
   }
-  public int getPlayerPoints(){
+
+  public int getPlayerPoints() {
     return player.pointValue();
   }
-  public int getBankerPoints(){
+
+  public int getBankerPoints() {
     return banker.pointValue();
   }
-
+  ///------------- Methods  -----------------------//
   public void updateBalance(Result result, Bet bet) {
-    if (userWon(result, bet)) {
+    if (userWon) {
       balance.add(amount);
     } else {
       balance.subtract(amount);
     }
-  }
-
-  public boolean userWon(Result result, Bet bet) {
-    return result.toString().equals(bet.toString());
   }
 
   public boolean playerGetsThirdCard(Hand player) {
@@ -182,11 +197,11 @@ public class Game {
     }
     if (bankerGetsThirdCard(player, banker)) {
       banker.add(shoe.draw());
-      consumer.accept(banker,false);
+      consumer.accept(banker, false);
     }
     setGameResult(whoWon(player, banker));
+    setUserWon(finalResult, bet);
     updateBalance(finalResult, bet);
-
   }
 
   public enum Result {
