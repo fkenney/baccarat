@@ -1,6 +1,7 @@
 package com.teambaccrat.controller;
 
 
+import com.teambaccrat.model.Balance;
 import com.teambaccrat.model.Game;
 import com.teambaccrat.model.Hand;
 import com.teambaccrat.model.exception.IllegalBetException;
@@ -80,6 +81,19 @@ public class Controller {
     if (amount < 20 || amount > 100 || amount > game.getBalance()) {
       return false;
     } else {
+      return true;
+    }
+  }
+
+  private static int getBalance() {
+    return Balance.getBalance();
+  }
+  public Boolean isValidBalance() {
+    int currentBalance = getBalance();
+    if (currentBalance < 20) {
+      System.out.printf("You don't have enough money to make that bet, Current Balance $ %d%n", currentBalance );
+      return false;
+    }else{
       return true;
     }
   }

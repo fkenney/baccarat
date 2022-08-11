@@ -15,7 +15,7 @@ public class View {
   private final String gameStartPresentation =
       "%n============================================%n"
           + "Wager: %s \t\t Bet: %s \t\t Balance: %s%n"
-          + "============================================%n";
+          + "============================================%n ";
 
   private final String gameResultPresentation =
       "============================================%n"

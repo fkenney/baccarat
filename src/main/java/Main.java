@@ -21,6 +21,7 @@ public class Main {
       c.setBet();
       c.setAmount();
       c.startGame();
+      run = c.isValidBalance();
       run = continueGame();
     }
     System.out.println(
@@ -46,7 +47,9 @@ public class Main {
     return gameContinue;
   }
 
+
   private static boolean isValid(int userInput) {
+
     if (userInput == 1 || userInput == 2) {
       return true;
     } else {
