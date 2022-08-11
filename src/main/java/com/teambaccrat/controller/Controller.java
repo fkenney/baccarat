@@ -1,6 +1,7 @@
 package com.teambaccrat.controller;
 
 import com.teambaccrat.model.Balance;
+import com.teambaccrat.model.Bet;
 import com.teambaccrat.model.Game;
 import com.teambaccrat.model.exception.IllegalBetException;
 import com.teambaccrat.model.exception.IllegalWagerAmountException;
@@ -22,42 +23,58 @@ public class Controller {
   }
 
   public static void setBet() throws IOException {
-    System.out.println(
-        " Who do you want to put the bet on? 1. Banker 2. Player 3. Tie. Press the number, please");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String bet = reader.readLine();
-
-    if (bet.equals("1")) {
-      System.out.println("You made a bet on Banker");
-    } else if (bet.equals("2")) {
-      System.out.println("You made a bet on Player");
-
-    } else if (bet.equals("3")) {
-      System.out.println("You made a bet on Tie");
-
-    } else {
-      throw new IllegalBetException(
-          "Please, place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie");
-    }
+    String bet;
+    do{
+      System.out.println(
+          "\n Who do you want to put the bet on? 1. Banker 2. Player 3. Tie. \n ");
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+      bet = reader.readLine();
+      System.out.println(bet);
+    } while (!isValidBet(bet));
     game.setBet(bet);
-    presentBet();
+    Bet userBet = Bet.getName(bet);
+    presentBet(userBet.toString());
+  }
+
+  private static boolean isValidBet(String bet){
+    if (bet.equals("1") || bet.equals("2") || bet.equals("3")){
+      return true;
+    } else {
+      System.out.println("Please, choose the valid option");
+      return false;
+    }
+  }
+
+  public static String getBet() {
+    return game.getBet().toString();
   }
 
   public void setAmount () throws IOException {
-    Balance balance = new Balance(Balance.getBalance());
-    System.out.println("How much do you want to bet?");
-    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-    String userAmount = reader.readLine();
-    System.out.println(userAmount);
-    System.out.println("You put $" + userAmount);
-    int amount = Integer.parseInt(userAmount);
+
+    int amount;
+    String userAmount;
+    do{ System.out.println(" How much do you want to bet on " + getBet() + "? \n Your current Balance is : " + game.getBalance()
+        + "Min: 20, Max: 100 " );
+      BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+      userAmount = reader.readLine();
+      amount = Integer.parseInt(userAmount);
+    } while (!isValidAmount(amount));
     game.setAmount(amount);
-    presentAmount();
+    presentAmount(userAmount);
+  }
+
+  private static boolean isValidAmount(int amount){
+    if (amount < 20 || amount > 100 || amount > game.getBalance()){
+      System.out.println("Please, put the valid amount.");
+      return false;
+    }else{
+      return true;
+    }
   }
 
   public void startGame() {
     game.start((hand,isPlayer) -> {
-      System.out.println("dealt to " + (isPlayer? "player" : "banker") + ": " + hand.getLastCard() + "\n" + hand);
+      System.out.println("Dealt to " + (isPlayer? "player" : "banker") + ": " + hand.getLastCard() + "\n" + hand);
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
@@ -66,13 +83,13 @@ public class Controller {
     });
   }
 
-  public static void presentBet() {
-    view.printBetInfo(game);
+  public static void presentBet(String bet) {
+    view.printBetInfo(String.valueOf(bet));
 
   }
 
-  public void presentAmount() {
-    view.printAmountInfo(game);
+  public void presentAmount(String amount) {
+    view.printAmountInfo(amount);
   }
 
   public void presentGreeting() {
