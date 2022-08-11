@@ -3,8 +3,10 @@ package com.teambaccrat.controller;
 import com.teambaccrat.model.Balance;
 import com.teambaccrat.model.Bet;
 import com.teambaccrat.model.Game;
+import com.teambaccrat.model.Hand;
 import com.teambaccrat.model.exception.IllegalBetException;
 import com.teambaccrat.model.exception.IllegalWagerAmountException;
+import com.teambaccrat.model.exception.NoBalanceException;
 import com.teambaccrat.view.View;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,23 +26,19 @@ public class Controller {
 
   public static void setBet() throws IOException {
     String bet;
-    do{
-      System.out.println(
-          "\n Who do you want to put the bet on? 1. Banker 2. Player 3. Tie. \n ");
+    do {
+      promptBet();
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
       bet = reader.readLine();
-      System.out.println(bet);
     } while (!isValidBet(bet));
     game.setBet(bet);
-    Bet userBet = Bet.getName(bet);
-    presentBet(userBet.toString());
+    presentBet(bet);
   }
 
-  private static boolean isValidBet(String bet){
-    if (bet.equals("1") || bet.equals("2") || bet.equals("3")){
+  private static boolean isValidBet(String bet) {
+    if (bet.equals("1") || bet.equals("2") || bet.equals("3")) {
       return true;
     } else {
-      System.out.println("Please, choose the valid option");
       return false;
     }
   }
@@ -49,64 +47,82 @@ public class Controller {
     return game.getBet().toString();
   }
 
-  public void setAmount () throws IOException {
-
+  public void setAmount() throws IOException {
     int amount = 0;
     String userAmount = null;
-    do{
-      System.out.println("How much do you want to bet on " + getBet() + "? \n Your current Balance is : " + game.getBalance()
-        + "Min: 20, Max: 100 " );
+    do {
+      promptWager();
       try {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         userAmount = reader.readLine();
         amount = Integer.parseInt(userAmount);
+        game.setAmount(amount);
       } catch (IOException e) {
         throw new RuntimeException(e);
-      } catch (NumberFormatException e) {
+      } catch (IllegalWagerAmountException | NoBalanceException e) {
+        System.out.println(e.getMessage());
         continue;
       }
     } while (!isValidAmount(amount));
-    game.setAmount(amount);
-    presentAmount(userAmount);
+
+    presentAmount();
   }
 
-  private static boolean isValidAmount(int amount){
-    if (amount < 20 || amount > 100 || amount > game.getBalance()){
-      System.out.println("Please, put the valid amount.");
+  private static boolean isValidAmount(int amount) {
+    if (amount < 20 || amount > 100 || amount > game.getBalance()) {
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
   public void startGame() {
-    game.start((hand,isPlayer) -> {
-      System.out.println("Dealt to " + (isPlayer? "player" : "banker") + ": " + hand.getLastCard() + "\n" + hand);
+    presentGameStart();
+    game.start((hand, isPlayer) -> {
+      presentCards(hand, isPlayer);
       try {
         Thread.sleep(1000);
       } catch (InterruptedException e) {
         // ignore exception
       }
     });
+    presentFinalHandTally();
+    presentGameResults();
+  }
+
+  public static void promptBet() {
+    System.out.println(view.betPrompt());
   }
 
   public static void presentBet(String bet) {
-    view.printBetInfo(String.valueOf(bet));
+    System.out.printf(view.betInfoPresentation(), getBet());
 
   }
 
-  public void presentAmount(String amount) {
-    view.printAmountInfo(amount);
+  public void presentAmount() {
+    System.out.printf(view.wagerAmountPresentation(), game.getAmount());
   }
 
   public void presentGreeting() {
-    view.printGreeting();
+    System.out.println(view.greeting());
+    ;
   }
 
-  public void presentIllegalBetError() {
-    view.printIllegalBetError();
-
+  public void promptWager() {
+    System.out.printf(view.wagerPrompt(), getBet(), game.getBalance(), game.MIN_BET, game.MAX_BET);
   }
 
+  public void presentGameStart(){
+    System.out.printf(view.gameStartPresentation(),game.getAmount(), getBet(), game.getBalance());
+  }
+  public void presentCards(Hand hand, boolean isPlayer){
+    System.out.printf(view.cardPresentation(), (isPlayer ? "player":"banker"), hand.getLastCard(), hand);
+  }
+  public void presentGameResults(){
+    System.out.printf(view.getGameResultPresentation(), game.getGameResult(), (game.getUserWon()? "You Won!(+": "You Loss(-"),game.getAmount(), game.getBalance());
+  }
+  public void presentFinalHandTally(){
+    System.out.printf(view.getFinalHandValuePresentation(), game.getPlayerHand(), game.getPlayerPoints(), game.getBankerHand(), game.getBankerPoints());
+  }
 
 }
