@@ -68,6 +68,8 @@ public class Controller {
         game.setAmount(amount);
       } catch (IOException e) {
         throw new RuntimeException(e);
+      } catch (NumberFormatException e){
+        continue;
       } catch (IllegalWagerAmountException | NoBalanceException e) {
         System.out.println(e.getMessage());
         continue;
