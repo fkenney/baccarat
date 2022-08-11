@@ -82,7 +82,7 @@ public class Game {
     return Balance.getBalance();
   }
 
-  public void setGameResult(Result result) {
+  private void setGameResult(Result result) {
     finalResult = result;
   }
 
@@ -113,7 +113,7 @@ public class Game {
     return banker.pointValue();
   }
   ///------------- Methods  -----------------------//
-  public void updateBalance(Result result, Bet bet) {
+  private void updateBalance(Result result, Bet bet) {
     if (userWon) {
       balance.add(amount);
     } else {
@@ -121,11 +121,11 @@ public class Game {
     }
   }
 
-  public boolean playerGetsThirdCard(Hand player) {
+  private boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
   }
 
-  public boolean bankerGetsThirdCard(Hand player, Hand banker) {
+  private boolean bankerGetsThirdCard(Hand player, Hand banker) {
     boolean getThirdCard = false;
     int valueOfLastPlayerCard = player.getLastCard().getRank().getPoint();
     int bankerPoints = banker.pointValue();
@@ -159,7 +159,7 @@ public class Game {
     return getThirdCard;
   }
 
-  public Result whoWon(Hand player, Hand banker) {
+  private Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
     Result winResult = null;
