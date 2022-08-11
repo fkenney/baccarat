@@ -21,8 +21,7 @@ public class Main {
       c.setBet();
       c.setAmount();
       c.startGame();
-      run = c.isValidBalance();
-      run = continueGame();
+      run = c.isValidBalance() && continueGame();
     }
     System.out.println(
         "Thank you for playing Baccarat. Your result is : Balance: " + Balance.getBalance()

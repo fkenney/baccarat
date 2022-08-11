@@ -89,9 +89,9 @@ public class Controller {
     return Balance.getBalance();
   }
   public Boolean isValidBalance() {
-    int currentBalance = getBalance();
-    if (currentBalance < 20) {
-      System.out.printf("You don't have enough money to make that bet, Current Balance $ %d%n", currentBalance );
+    int balance = getBalance();
+    if (balance < 20) {
+      System.out.printf("You don't have enough money to make that bet, Current Balance $ %d%n", balance );
       return false;
     }else{
       return true;
@@ -127,7 +127,6 @@ public class Controller {
 
   public void presentGreeting() {
     System.out.println(view.greeting());
-    ;
   }
 
   public void promptWager() {

@@ -93,5 +93,4 @@ public class TestGame {
    assertEquals(Result.BANKER, result);
   }
 
-
 }
