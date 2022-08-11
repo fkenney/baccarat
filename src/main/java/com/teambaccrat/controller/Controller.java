@@ -13,7 +13,7 @@ import java.io.InputStreamReader;
 public class Controller {
 
   private static Game game;
-  private View view;
+  private static View view;
 
   public Controller(Game game, View view) {
     super();
@@ -40,20 +40,19 @@ public class Controller {
           "Please, place a valid bet of '1' for Banker, '2' for Player, or '3' for Tie");
     }
     game.setBet(bet);
-    //view.presentBet
+    presentBet();
   }
 
-  public void setAmount () throws IllegalWagerAmountException {
-    try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-      System.out.println("How much do you want to bet?");
-      String userAmount = reader.readLine();
-      game.setAmount(Integer.parseInt(userAmount));
-      //presentAmount();
-    } catch (IllegalWagerAmountException e) {
-      System.out.println(e.getMessage());
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+  public void setAmount () throws IOException {
+    Balance balance = new Balance(Balance.getBalance());
+    System.out.println("How much do you want to bet?");
+    BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    String userAmount = reader.readLine();
+    System.out.println(userAmount);
+    System.out.println("You put $" + userAmount);
+    int amount = Integer.parseInt(userAmount);
+    game.setAmount(amount);
+    presentAmount();
   }
 
   public void startGame() {
@@ -67,7 +66,7 @@ public class Controller {
     });
   }
 
-  public void presentBet() {
+  public static void presentBet() {
     view.printBetInfo(game);
 
   }
@@ -77,11 +76,11 @@ public class Controller {
   }
 
   public void presentGreeting() {
-    //view.printGreeting();
+    view.printGreeting();
   }
 
   public void presentIllegalBetError() {
-    //view.printIllegalBetError();
+    view.printIllegalBetError();
 
   }
 
