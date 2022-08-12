@@ -31,9 +31,11 @@ public class Controller {
   }
 
   /**
-   * Receives user bet input using BefferedReader, and run setBet method in
+   * Receives user bet input, and set the valid bet using setBet method in
    * {@link com.teambaccrat.model.Game }
+   *
    */
+
   public static void setBet() {
     String bet = null;
     do {
@@ -61,19 +63,18 @@ public class Controller {
   /**
    * Checks if the user bet input is valid.
    * Boolean result will be returned to setBet method.
+   *
+   * @param bet String
    */
 
   private static boolean isValidBet(String bet) {
-    if (bet.equals("1") || bet.equals("2") || bet.equals("3")) {
-      return true;
-    } else {
-      return false;
-    }
+    return bet.equals("1") || bet.equals("2") || bet.equals("3");
   }
 
   /**
-   * Receives user bet input using BefferedReader, and run setAmount method in
-   * {@link com.teambaccrat.model.Game }
+   * Receives user bet input using, and run setAmount method in
+   * {@link com.teambaccrat.model.Game } only if the bet input is valid.
+   *
    */
   public void setAmount() {
     int amount = 0;
@@ -100,7 +101,10 @@ public class Controller {
 
   /**
    * Checks if the user amount input is valid.
+   *
+   * @param amount int
    */
+
   private static boolean isValidAmount(int amount) {
     return amount >= 20 && amount <= 100 && amount <= game.getBalance();
   }
@@ -110,7 +114,8 @@ public class Controller {
   }
 
   /**
-   * Checks if user has enough balnce to play game.
+   * Checks if user balance is more than minimum bet, 20.
+   *
    */
 
   public Boolean isValidBalance() {
@@ -123,10 +128,13 @@ public class Controller {
     }
   }
 
+
   /**
-   * Calls startGame method in
-   * {@link com.teambaccrat.model.Game },
-   * and printout each card with 1.5 seconds of time interval.
+   * Calls game methods in
+   * {@link com.teambaccrat.model.Game }
+   * to starts game, deals cards, and gets results
+   * Each dealt card will be presented to the user with 1.5 seconds of time interval.
+   *
    */
 
   public void startGame() {
@@ -143,10 +151,13 @@ public class Controller {
     presentGameResults();
   }
 
+
+
   /**
-   *
-   * Presents outputs to user by updating values in printout formats in
+   * All methods below will
+   * present printouts to user by updating values in printout formats in
    * {@link com.teambaccrat.view.View}
+   *
    */
 
   public static void promptBet() {
