@@ -9,8 +9,7 @@ import java.util.Random;
 import java.util.function.BiConsumer;
 
 /**
- * Calculates outcome of a game of Baccarat given a bet and wager from
- * {@link com.teambaccrat.controller.Controller}.
+ * Calculates outcome of a game of Baccarat when given a bet and wager.
  */
 public class Game {
 
