@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"com.teambaccrat.controller"},{"l":"com.teambaccrat.model"},{"l":"com.teambaccrat.model.exception"},{"l":"com.teambaccrat.view"}]
