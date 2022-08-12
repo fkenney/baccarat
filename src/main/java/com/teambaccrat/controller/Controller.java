@@ -13,6 +13,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 
+/**
+ * Receives and validate user input, and run a game using methods in
+ * {@link com.teambaccrat.model.Game},
+ * and updates {@link com.teambaccrat.view.View}.
+ */
+
 public class Controller {
 
   private static Game game;
@@ -24,6 +30,10 @@ public class Controller {
     this.view = view;
   }
 
+  /**
+   * Receives user bet input using BefferedReader, and run setBet method in
+   * {@link com.teambaccrat.model.Game }
+   */
   public static void setBet() {
     String bet = null;
     do {
@@ -48,6 +58,11 @@ public class Controller {
     return game.getBet().toString();
   }
 
+  /**
+   * Checks if the user bet input is valid.
+   * Boolean result will be returned to setBet method.
+   */
+
   private static boolean isValidBet(String bet) {
     if (bet.equals("1") || bet.equals("2") || bet.equals("3")) {
       return true;
@@ -56,6 +71,10 @@ public class Controller {
     }
   }
 
+  /**
+   * Receives user bet input using BefferedReader, and run setAmount method in
+   * {@link com.teambaccrat.model.Game }
+   */
   public void setAmount() {
     int amount = 0;
     String userAmount;
@@ -79,6 +98,9 @@ public class Controller {
     presentAmount();
   }
 
+  /**
+   * Checks if the user amount input is valid.
+   */
   private static boolean isValidAmount(int amount) {
     return amount >= 20 && amount <= 100 && amount <= game.getBalance();
   }
@@ -86,6 +108,11 @@ public class Controller {
   private static int getBalance() {
     return Balance.getBalance();
   }
+
+  /**
+   * Checks if user has enough balnce to play game.
+   */
+
   public Boolean isValidBalance() {
     int balance = getBalance();
     if (balance < 20) {
@@ -95,6 +122,12 @@ public class Controller {
       return true;
     }
   }
+
+  /**
+   * Calls startGame method in
+   * {@link com.teambaccrat.model.Game },
+   * and printout each card with 1.5 seconds of time interval.
+   */
 
   public void startGame() {
     presentGameStart();
@@ -109,6 +142,12 @@ public class Controller {
     presentFinalHandTally();
     presentGameResults();
   }
+
+  /**
+   *
+   * Presents outputs to user by updating values in printout formats in
+   * {@link com.teambaccrat.view.View}
+   */
 
   public static void promptBet() {
     System.out.println(view.betPrompt());
