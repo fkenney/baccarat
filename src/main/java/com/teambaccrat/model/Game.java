@@ -8,16 +8,22 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-
+/**
+ * Calculates outcome of a game of Baccarat given a bet and wager from
+ * {@link com.teambaccrat.controller.Controller}.
+ */
 public class Game {
+
   private static final double MARKER_MIN = 0.6667;
   private static final double MARKER_MAX = 0.8;
   public static final int MAX_BET = 100;
   public static final int MIN_BET = 20;
+
+  public static final int NUM_DECKS = 8;
   private Hand player;
   private Hand banker;
   private final Shoe shoe;
-  private Balance balance;
+  private final Balance balance;
   private Bet bet;
   private int amount;
   private Result finalResult;
@@ -25,16 +31,28 @@ public class Game {
 
   ///-------------Constructor -----------------------//
 
+  /**
+   * Creates an instance of the game with an initial balance, and creates instances of {@link Shoe}
+   * and {@link Hand}.
+   *
+   * @param initialBalance int
+   */
   public Game(int initialBalance) {
     balance = new Balance(initialBalance);
     Random rnd = new SecureRandom();
-    int numDecks = 8;
     double markerPoint = rnd.nextDouble() * (MARKER_MAX - MARKER_MIN) + MARKER_MIN;
-    shoe = new Shoe(numDecks, rnd, markerPoint);
+    shoe = new Shoe(NUM_DECKS, rnd, markerPoint);
   }
 
-  ///-------------Setter/Getters -----------------------//
-  public void setBet(String userBet) {
+  ///-------------Setter/Getters --------------------//
+
+  /**
+   * Checks if the bet is valid and sets the userBet to the matching {@link Bet} value
+   *
+   * @param userBet the bet given by user
+   * @throws IllegalBetException Thrown if userBet does not equal 1, 2, or 3.
+   */
+  public void setBet(String userBet) throws IllegalBetException {
     if (!(userBet.equals("1")) && !(userBet.equals("2")) && (!userBet.equals("3"))) {
       throw new IllegalBetException(
           "Please place a valid bet of : 1, 2, or 3");
@@ -52,7 +70,15 @@ public class Game {
     return bet;
   }
 
-  public void setAmount(int amount) {
+  /**
+   * Checks if the amount is a valid amount and sets the amount.
+   *
+   * @param amount the wager amount given by user
+   * @throws IllegalWagerAmountException Thrown if the bet amount is less than 20 or greater than
+   *                                     100.
+   * @throws NoBalanceException          Thrown if the bet amount is greater than current balance.
+   */
+  public void setAmount(int amount) throws IllegalWagerAmountException, NoBalanceException {
     int balance = getBalance();
     if (amount < MIN_BET || amount > MAX_BET) {
       throw new IllegalWagerAmountException(
@@ -63,11 +89,6 @@ public class Game {
     if (amount > balance) {
       throw new NoBalanceException(
           String.format("You don't have enough money to make that bet, Current Balance $ %d%n",
-              balance));
-    }
-    if (balance < MIN_BET) {
-      throw new NoBalanceException(
-          String.format("You don't have enough money to make bet, Current Balance = $ %d%n",
               balance));
     }
     this.amount = amount;
@@ -85,6 +106,12 @@ public class Game {
     finalResult = result;
   }
 
+  /**
+   * Determines whether user won, if the {@link Result} matches {@link Bet}
+   *
+   * @param result the result of the game
+   * @param bet    the initial bet from the user
+   */
   private void setUserWon(Result result, Bet bet) {
     userWon = result.toString().equals(bet.toString());
   }
@@ -92,6 +119,7 @@ public class Game {
   public boolean getUserWon() {
     return userWon;
   }
+
   public String getGameResult() {
     return finalResult.getValue();
   }
@@ -111,7 +139,15 @@ public class Game {
   public int getBankerPoints() {
     return banker.pointValue();
   }
+
   ///------------- Methods  -----------------------//
+
+  /**
+   * Updates {@link Balance} based on whether the user won.
+   *
+   * @param result game result
+   * @param bet    the initial bet
+   */
   private void updateBalance(Result result, Bet bet) {
     if (userWon) {
       balance.add(amount);
@@ -120,10 +156,23 @@ public class Game {
     }
   }
 
+  /**
+   * Determines whether {@link Hand} that belongs to the player gets dealt a third card.
+   *
+   * @param player the Hand that belongs to the player
+   * @return boolean
+   */
   private boolean playerGetsThirdCard(Hand player) {
     return player.pointValue() < 6;
   }
 
+  /**
+   * Determines whether {@link Hand} that belongs to the banker gets dealt a third card.
+   *
+   * @param player the Hand that belongs to the player
+   * @param banker the Hand that belongs to the banker
+   * @return boolean
+   */
   private boolean bankerGetsThirdCard(Hand player, Hand banker) {
     boolean getThirdCard = false;
     int valueOfLastPlayerCard = player.getLastCard().getRank().getPoint();
@@ -158,13 +207,22 @@ public class Game {
     return getThirdCard;
   }
 
+  /**
+   * Determines the {@link Result} of the game by comparing points of both hands
+   *
+   * @param player the player hand
+   * @param banker the banker hand
+   * @return Result
+   */
   public Result whoWon(Hand player, Hand banker) {
     int playerPoints = player.pointValue();
     int bankerPoints = banker.pointValue();
     Result winResult = null;
-    if (player.size() ==2 && (playerPoints == 8 || playerPoints == 9) && playerPoints != bankerPoints) {
+    if (player.size() == 2 && (playerPoints == 8 || playerPoints == 9)
+        && playerPoints != bankerPoints) {
       winResult = Result.PLAYER;
-    } else if ((banker.size() ==2 && bankerPoints == 8 || bankerPoints == 9) && playerPoints != bankerPoints) {
+    } else if ((banker.size() == 2 && bankerPoints == 8 || bankerPoints == 9)
+        && playerPoints != bankerPoints) {
       winResult = Result.BANKER;
     } else if (playerPoints == bankerPoints) {
       winResult = Result.TIE;
@@ -176,6 +234,12 @@ public class Game {
     return winResult;
   }
 
+  /**
+   * Deals cards from {@link Shoe} to each hand, determines whether either hand gets third card, and
+   * updates information based on final results.
+   *
+   * @param consumer used as a callback to determine banker vs player hand
+   */
   public void start(BiConsumer<Hand, Boolean> consumer) {
     player = new Hand();
     banker = new Hand();
