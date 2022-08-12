@@ -1,6 +1,8 @@
 package com.teambaccrat.view;
 
-
+/**
+ * Creates the representation of the information to display to the user.
+ */
 public class View {
 
   private final String betPrompt = "Dealer: Please place a bet, enter 1-Banker, 2-Player, 3-Tie";
@@ -60,6 +62,8 @@ public class View {
     return finalHandValuePresentation;
   }
 
-  public String noBalancePresentation() { return noBalancePresentation;}
+  public String noBalancePresentation() {
+    return noBalancePresentation;
+  }
 }
 
