@@ -1,5 +1,8 @@
 package com.teambaccrat.model;
 
+/**
+ * Creates the card suits and associated symbol and color.
+ */
 public enum Suit {
   CLUBS('\u2663', Color.BLACK),
   DIAMONDS('\u2662', Color.RED),

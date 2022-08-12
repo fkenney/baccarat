@@ -1,5 +1,7 @@
 package com.teambaccrat.model.exception;
-
+/**
+ * Exception that extends {@link IllegalArgumentException} to handle balance.
+ */
 public class NoBalanceException extends IllegalArgumentException {
 
   public NoBalanceException(String message) {

@@ -3,7 +3,9 @@ package com.teambaccrat.model;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Creates the hands that will be used to hold dealt cards.
+ */
 public class Hand {
 
    private final List<Card> cards;
@@ -22,7 +24,6 @@ public class Hand {
     * The pointValue() returned to the {@link com.teambaccrat.model.Game} clas.
     * @return point values calculated for each player in the game.
     */
-
    public int pointValue(){
       int points = 0;
       int rem= 0;

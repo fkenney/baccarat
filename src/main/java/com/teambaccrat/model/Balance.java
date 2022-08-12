@@ -1,5 +1,8 @@
 package com.teambaccrat.model;
 
+/**
+ * Creates the balance and contains methods to update the balance after each game of Baccarat
+ */
 public class Balance {
 
   private static int balance;

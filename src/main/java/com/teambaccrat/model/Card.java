@@ -3,6 +3,9 @@ package com.teambaccrat.model;
 import java.util.Comparator;
 import java.util.Objects;
 
+/**
+ * Creates a Card Object containing {@link Rank} and {@link Suit}
+ */
 public class Card implements Comparable<Card> {
 
   private static final Comparator<Card> NATURAL_ORDER_COMPARATOR = Comparator

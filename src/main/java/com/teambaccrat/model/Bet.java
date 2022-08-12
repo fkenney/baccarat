@@ -1,6 +1,8 @@
 package com.teambaccrat.model;
 
-
+/**
+ * Enum containing the Bet options in a game of Baccarat
+ */
 public enum Bet {
 
   BANKER("1"),

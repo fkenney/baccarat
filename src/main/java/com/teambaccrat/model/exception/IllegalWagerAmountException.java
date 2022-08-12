@@ -1,5 +1,7 @@
 package com.teambaccrat.model.exception;
-
+/**
+ * Exception that extends {@link IllegalArgumentException} to handle invalid bets.
+ */
 public class IllegalWagerAmountException extends IllegalArgumentException {
 
   public IllegalWagerAmountException(String message) {

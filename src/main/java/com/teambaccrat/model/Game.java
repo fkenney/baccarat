@@ -17,7 +17,6 @@ public class Game {
   private static final double MARKER_MAX = 0.8;
   public static final int MAX_BET = 100;
   public static final int MIN_BET = 20;
-
   public static final int NUM_DECKS = 8;
   private Hand player;
   private Hand banker;

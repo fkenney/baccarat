@@ -1,5 +1,8 @@
 package com.teambaccrat.model;
 
+/**
+ * Contains the card ranks and the associated Baccarat point value
+ */
 public enum Rank {
 
   ACE("A", 1),

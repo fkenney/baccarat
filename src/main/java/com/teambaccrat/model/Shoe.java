@@ -6,9 +6,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-
+/**
+ * Creates a shoe that holds n amount of decks
+ */
 public class Shoe {
-
 
   private final List<Card> cards;
   private final Random random;
