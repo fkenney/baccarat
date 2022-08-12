@@ -17,6 +17,12 @@ public class Hand {
       return cards.size();
    }
 
+
+   /***
+    * The pointValue() returned to the {@link com.teambaccrat.model.Game} clas.
+    * @return point values calculated for each player in the game.
+    */
+
    public int pointValue(){
       int points = 0;
       int rem= 0;

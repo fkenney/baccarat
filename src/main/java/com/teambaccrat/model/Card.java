@@ -14,6 +14,13 @@ public class Card implements Comparable<Card> {
   private final String representation;
   private final int hash;
 
+  /***
+   * Compiled the rank() and suit() to create the deck used in the
+   * {@link com.teambaccrat.model.Shoe} class.
+   * @param rank The card ranks for the deck.
+   * @param suit The card suit for the deck.
+   */
+
   public Card(Rank rank, Suit suit) {
     this.rank = rank;
     this.suit = suit;
