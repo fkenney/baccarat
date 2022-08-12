@@ -6,9 +6,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+
+/**
+ * Creates game,
+ * {@link com.teambaccrat.model.Game}
+ * view,
+ * {@link com.teambaccrat.view.View}
+ * controller
+ * {@link com.teambaccrat.controller.Controller}
+ * and take care of overall game flows
+ *
+ *
+ */
+
 public class Main {
 
   private static final int DEFAULT_INITIAL_BALANCE = 1000;
+
+  /**
+   * Creates a game, set the bet, set the bet amount, and start the game
+   * until the user choose not to play, or user doesn't have enough balance.
+   *
+   * @param args String[]
+   */
 
   public static void main(String[] args) throws IOException {
 
@@ -29,6 +49,13 @@ public class Main {
     );
   }
 
+  /**
+   * Determines whether to exit the game by user input
+   *
+   * @throws IOException Thrown if user input cannot be read;
+   * @return boolean
+   *
+   */
 
   public static boolean continueGame() throws IOException {
 
@@ -48,6 +75,14 @@ public class Main {
   }
 
 
+
+  /**
+   * Checks if user input is valid
+   *
+   * @param userInput int
+   * @return boolean
+   *
+   */
   private static boolean isValidInput(int userInput) {
 
     if (userInput == 1 || userInput == 2) {
