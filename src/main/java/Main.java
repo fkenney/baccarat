@@ -38,7 +38,7 @@ public class Main {
       System.out.println("Dealer: Do you want to play again? 1.Yes 2.No");
       BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
       userInput = reader.readLine();
-    } while (!isValid(Integer.parseInt(userInput)));
+    } while (!isValidInput(Integer.parseInt(userInput)));
     if (userInput.equals("1")) {
       gameContinue = true;
     } else if (userInput.equals("2")) {
@@ -48,7 +48,7 @@ public class Main {
   }
 
 
-  private static boolean isValid(int userInput) {
+  private static boolean isValidInput(int userInput) {
 
     if (userInput == 1 || userInput == 2) {
       return true;

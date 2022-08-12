@@ -24,7 +24,7 @@ public class Controller {
     this.view = view;
   }
 
-  public static void setBet() throws IOException {
+  public static void setBet() {
     String bet = null;
     do {
       promptBet();
@@ -56,7 +56,7 @@ public class Controller {
     }
   }
 
-  public void setAmount() throws IOException {
+  public void setAmount() {
     int amount = 0;
     String userAmount;
     do {
@@ -80,11 +80,7 @@ public class Controller {
   }
 
   private static boolean isValidAmount(int amount) {
-    if (amount < 20 || amount > 100 || amount > game.getBalance()) {
-      return false;
-    } else {
-      return true;
-    }
+    return amount >= 20 && amount <= 100 && amount <= game.getBalance();
   }
 
   private static int getBalance() {

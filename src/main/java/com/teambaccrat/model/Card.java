@@ -21,7 +21,6 @@ public class Card implements Comparable<Card> {
     hash = Objects.hash(rank, suit);
   }
 
-
   public Rank getRank() {
     return rank;
   }
