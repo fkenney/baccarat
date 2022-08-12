@@ -6,7 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+
 public class Shoe {
+
 
   private final List<Card> cards;
   private final Random random;
@@ -15,6 +17,11 @@ public class Shoe {
   private Iterator<Card> iterator;
   private int dealCount = Integer.MAX_VALUE;
   private boolean reshuffleNeeded = true;
+
+  /**
+   * Receives input from {@link com.teambaccrat.model.Card}, creates a shuffle method
+   * and updates {@link com.teambaccrat.model.Shoe} class for game initiation.
+   */
 
   public Shoe(int numDecks, Random random, double markerPoint) {
     this.cards = new ArrayList<>(Suit.values().length * Rank.values().length * numDecks);
@@ -31,6 +38,10 @@ public class Shoe {
 
     reshuffleCount = (int) (cards.size() * markerPoint);
   }
+
+  /**
+   * startGame() for {@link com.teambaccrat.model.Game} class to start the game.
+   */
 
   public void startGame() {
     if (dealCount > reshuffleCount) {
