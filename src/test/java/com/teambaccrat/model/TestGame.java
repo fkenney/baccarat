@@ -11,7 +11,7 @@ public class TestGame {
   @Test
   public void testThrowsIllegalBet() {
     try {
-      Game game = new Game();
+      Game game = new Game(500);
       game.setBet("8");
       game.setAmount(50);
     } catch (IllegalBetException e) {
@@ -21,8 +21,7 @@ public class TestGame {
 
   @Test
   void playerGetsThirdCard() {
-    Balance b = new Balance(1000);
-    Game game = new Game();
+    Game game = new Game(500);
     game.setBet("1");
     game.setAmount(50);
 
@@ -36,7 +35,7 @@ public class TestGame {
 
   @Test
   void bankerGetsThirdCard() {
-     Game game = new Game();
+     Game game = new Game(500);
      game.setBet("1");
      game.setAmount(50);
 
@@ -59,7 +58,7 @@ public class TestGame {
 
   @Test
   void updateBalance(){
-    Game game = new Game();
+    Game game = new Game(500);
     game.setBet("1");
     game.setAmount(50);
     Result result = Result.BANKER;
@@ -70,7 +69,7 @@ public class TestGame {
 
   @Test
   void whoWon_BANKER_WIN(){
-    Game game = new Game();
+    Game game = new Game(500);
     game.setBet("1");
     game.setAmount(50);
 
@@ -91,6 +90,16 @@ public class TestGame {
 
    Result result = game.whoWon(playerHand, bankerHand);
    assertEquals(Result.BANKER, result);
+  }
+
+  @Test
+  void testBalance(){
+    Game game = new Game(500);
+    updateBalance();
+    game.setBet("1");
+    game.setAmount(50);
+
+
   }
 
 }
