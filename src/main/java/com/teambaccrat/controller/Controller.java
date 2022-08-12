@@ -58,7 +58,7 @@ public class Controller {
 
   public void setAmount() throws IOException {
     int amount = 0;
-    String userAmount = null;
+    String userAmount;
     do {
       promptWager();
       try {
@@ -93,7 +93,7 @@ public class Controller {
   public Boolean isValidBalance() {
     int balance = getBalance();
     if (balance < 20) {
-      System.out.printf("You don't have enough money to play, Current Balance $ %d%n", balance );
+      presentNotEnoughBalance();
       return false;
     }else{
       return true;
@@ -146,6 +146,10 @@ public class Controller {
   }
   public void presentFinalHandTally(){
     System.out.printf(view.getFinalHandValuePresentation(), game.getPlayerHand(), game.getPlayerPoints(), game.getBankerHand(), game.getBankerPoints());
+  }
+
+  public void presentNotEnoughBalance(){
+    System.out.println(view.noBalancePresentation());
   }
 
 }

@@ -16,8 +16,7 @@ public class Main {
     View view = new View();
     Controller c = new Controller(game, view);
     c.presentGreeting();
-
-    boolean run = true;
+    boolean run;
 
     do {
       c.setBet();

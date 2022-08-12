@@ -22,6 +22,8 @@ public class View {
           + "Result:%n%s, %s%s) \tBalance: %s%n"
           + "============================================%n";
 
+  private final String noBalancePresentation = "You don't have enough money to play. \n";
+
   public String betPrompt() {
     return betPrompt;
   }
@@ -57,5 +59,7 @@ public class View {
   public String getFinalHandValuePresentation() {
     return finalHandValuePresentation;
   }
+
+  public String noBalancePresentation() { return noBalancePresentation;}
 }
 
