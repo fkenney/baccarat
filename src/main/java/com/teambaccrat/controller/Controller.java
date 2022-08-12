@@ -14,9 +14,8 @@ import java.io.InputStreamReader;
 
 
 /**
- * Receives and validate user input, and run a game using methods in
- * {@link com.teambaccrat.model.Game},
- * and updates {@link com.teambaccrat.view.View}.
+ * Receives and validates user input, and run game using methods in
+ * {@link com.teambaccrat.model.Game}, and updates {@link com.teambaccrat.view.View}.
  */
 
 public class Controller {
@@ -33,26 +32,23 @@ public class Controller {
   /**
    * Receives user bet input, and set the valid bet using setBet method in
    * {@link com.teambaccrat.model.Game }
-   *
    */
 
   public static void setBet() {
     String bet = null;
     do {
       promptBet();
-      try{
+      try {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         bet = reader.readLine();
         game.setBet(bet);
-      }
-      catch (IOException e){
-          throw new RuntimeException(e);
-      }
-      catch(IllegalBetException e){
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      } catch (IllegalBetException e) {
         System.out.println(e.getMessage());
         continue;
       }
-    }while (!isValidBet(bet));
+    } while (!isValidBet(bet));
     presentBet(bet);
   }
 
@@ -60,21 +56,22 @@ public class Controller {
     return game.getBet().toString();
   }
 
+
   /**
-   * Checks if the user bet input is valid.
-   * Boolean result will be returned to setBet method.
+   * Checks if the user bet input is valid. Boolean result will be returned to setBet method.
    *
    * @param bet String
+   * @return boolean
    */
 
   private static boolean isValidBet(String bet) {
     return bet.equals("1") || bet.equals("2") || bet.equals("3");
   }
 
+
   /**
-   * Receives user bet input using, and run setAmount method in
-   * {@link com.teambaccrat.model.Game } only if the bet input is valid.
-   *
+   * Receives user bet input using, and run setAmount method in {@link com.teambaccrat.model.Game }
+   * only if the bet input is valid. Confirms bet amounts to user by presenting print out.
    */
   public void setAmount() {
     int amount = 0;
@@ -88,7 +85,7 @@ public class Controller {
         game.setAmount(amount);
       } catch (IOException e) {
         throw new RuntimeException(e);
-      } catch (NumberFormatException e){
+      } catch (NumberFormatException e) {
         continue;
       } catch (IllegalWagerAmountException | NoBalanceException e) {
         System.out.println(e.getMessage());
@@ -103,6 +100,7 @@ public class Controller {
    * Checks if the user amount input is valid.
    *
    * @param amount int
+   * @return boolean
    */
 
   private static boolean isValidAmount(int amount) {
@@ -116,6 +114,7 @@ public class Controller {
   /**
    * Checks if user balance is more than minimum bet, 20.
    *
+   * @return boolean
    */
 
   public Boolean isValidBalance() {
@@ -123,24 +122,22 @@ public class Controller {
     if (balance < 20) {
       presentNotEnoughBalance();
       return false;
-    }else{
+    } else {
       return true;
     }
   }
 
 
   /**
-   * Calls game methods in
-   * {@link com.teambaccrat.model.Game }
-   * to starts game, deals cards, and gets results
-   * Each dealt card will be presented to the user with 1.5 seconds of time interval.
-   *
+   * Calls game methods in {@link com.teambaccrat.model.Game } to starts game, deals cards, and gets
+   * results Each dealt card will be presented to the user with 1.5 seconds of time interval.
+   * Presents game results to user.
    */
 
   public void startGame() {
     presentGameStart();
     game.start((hand, isPlayer) -> {
-      presentCards(hand, isPlayer );
+      presentCards(hand, isPlayer);
       try {
         Thread.sleep(1500);
       } catch (InterruptedException e) {
@@ -152,12 +149,9 @@ public class Controller {
   }
 
 
-
   /**
-   * All methods below will
-   * present printouts to user by updating values in printout formats in
+   * All methods below will present printouts to user by updating values in printout formats in
    * {@link com.teambaccrat.view.View}
-   *
    */
 
   public static void promptBet() {
@@ -181,20 +175,26 @@ public class Controller {
     System.out.printf(view.wagerPrompt(), getBet(), game.getBalance(), game.MIN_BET, game.MAX_BET);
   }
 
-  public void presentGameStart(){
-    System.out.printf(view.gameStartPresentation(),game.getAmount(), getBet(), game.getBalance());
-  }
-  public void presentCards(Hand hand, boolean isPlayer){
-    System.out.printf(view.cardPresentation(), (isPlayer ? "player":"banker"), hand.getLastCard(), hand.getLastCard().getRank().getPoint(), hand, hand.pointValue());
-  }
-  public void presentGameResults(){
-    System.out.printf(view.getGameResultPresentation(), game.getGameResult(), (game.getUserWon()? "You Won!(+": "You Loss(-"),game.getAmount(), game.getBalance());
-  }
-  public void presentFinalHandTally(){
-    System.out.printf(view.getFinalHandValuePresentation(), game.getPlayerHand(), game.getPlayerPoints(), game.getBankerHand(), game.getBankerPoints());
+  public void presentGameStart() {
+    System.out.printf(view.gameStartPresentation(), game.getAmount(), getBet(), game.getBalance());
   }
 
-  public void presentNotEnoughBalance(){
+  public void presentCards(Hand hand, boolean isPlayer) {
+    System.out.printf(view.cardPresentation(), (isPlayer ? "player" : "banker"), hand.getLastCard(),
+        hand.getLastCard().getRank().getPoint(), hand, hand.pointValue());
+  }
+
+  public void presentGameResults() {
+    System.out.printf(view.getGameResultPresentation(), game.getGameResult(),
+        (game.getUserWon() ? "You Won!(+" : "You Loss(-"), game.getAmount(), game.getBalance());
+  }
+
+  public void presentFinalHandTally() {
+    System.out.printf(view.getFinalHandValuePresentation(), game.getPlayerHand(),
+        game.getPlayerPoints(), game.getBankerHand(), game.getBankerPoints());
+  }
+
+  public void presentNotEnoughBalance() {
     System.out.println(view.noBalancePresentation());
   }
 
